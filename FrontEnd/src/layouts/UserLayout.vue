@@ -16,7 +16,7 @@ function logout() {
       <h1 class="font-semibold">User</h1>
       <nav class="space-x-3 text-sm">
         <!-- router-link คือ ปุ่มหรือลิงก์ที่เปลี่ยนหน้าใน Vue โดยไม่ reload ทั้งหน้าเว็บ”  -->
-        <router-link class="underline" :to="{ name: 'AdminProducts' }">
+        <router-link class="underline" :to="{ name: 'UserProducts' }">
           Products
         </router-link>
         <button class="underline" @click="logout">

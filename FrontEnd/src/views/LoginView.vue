@@ -3,7 +3,11 @@ import useVuelidate from '@vuelidate/core';
 import { minLength, required } from '@vuelidate/validators';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useAuth } from '../composables/useAuth';
 import { login } from '../services/auth.service';
+import { decodeJWT } from '../utils/jwt';
+
+const { setToken, setUser } = useAuth();
 
 // --- เพื่อใช้ Router --- //
 const router = useRouter();
@@ -35,18 +39,40 @@ async function onSubmit() {
 
   loading.value = true; // ตั้งสถานะกำลังโหลด
   try {
-    const res = await login(form.value);
-    console.log('Login successful:', res);
-    const token = res.token; // ดึง token จากผลลัพธ์
-    localStorage.setItem('token', token); // เก็บ token ใน localStorage
-    router.replace({ name: "UserProducts" }); // ไปที่หน้า products เมื่อล็อกอินสำเร็จ
+    const res = await login(form.value); // เรียก API เพื่อทำการล็อกอิน
+    const token = res.token;
+    setToken(token); // เก็บ token ใน local storage ด้วย useAuth composable
+
+    // ดึง role จาก JWT
+    const payload: any = decodeJWT(token);
+    const role = payload?.role
+      ?? payload?.roles?.[0]; // กรณีมีหลาย role ให้เอาอันแรก
+
+    setUser({
+      username: payload?.username ?? form.value.username,
+      fullName: payload?.fullName,
+      phone: payload?.phone,
+      password: '',
+      confirmPassword: '',
+      role,
+    });
+
+    // นำทางไปยังหน้าตามบทบาท
+    if (role === 'Admin') {
+      router.push({ name: 'AdminProducts' }); // product ของ admin
+      console.log("Admin Login");
+    } else {
+      router.push({ name: 'UserProducts' }); // product ของ user
+      console.log("User Login");
+    }
   } catch (err: any) {
-    console.error('Login failed:', err);
-    error.value = err.response?.data?.message || 'Login failed. Please try again.'; // ตั้งข้อความแสดงข้อผิดพลาด ความหมายคือ ถ้ามีข้อความจากเซิร์ฟเวอร์ให้ใช้ข้อความนั้น ถ้าไม่มีให้ใช้ข้อความทั่วไป
+    error.value = err.response?.data?.message || 'Failed to login. Please try again.';
+    console.error('Login error:', err);
   } finally {
     loading.value = false; // ปิดสถานะกำลังโหลด
+    console.log("Login process finished.");
   }
-}
+};
 </script>
 
 <template>

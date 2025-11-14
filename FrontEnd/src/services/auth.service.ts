@@ -1,7 +1,7 @@
 // *** ไฟล์นี้คือ การเรียกใช้งาน API ที่เกี่ยวกับการยืนยันตัวตน (Authentication) *** //
 
 import type { LoginBody, LoginResponse } from "../models/auth.model";
-import { httpClient } from "../services/main.service";
+import { httpClient } from "./http.service";
 
 // --- ฟังก์ชันสำหรับล็อกอิน --- //
 export const login = async (body: LoginBody): Promise<LoginResponse> => {

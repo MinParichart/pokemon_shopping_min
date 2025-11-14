@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { httpClient } from '../services/main.service';
+import { httpClient } from '../services/http.service';
 
 const items = ref<any[]>([])
 const loading = ref(true);
