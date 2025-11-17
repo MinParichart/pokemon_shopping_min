@@ -9,6 +9,12 @@ export const login = async (body: LoginBody): Promise<LoginResponse> => {
   return response.data;
 };
 
+// --- ฟังก์ชันสำหรับล็อกอิน --- //
+export const loginAdmin = async (body: LoginBody): Promise<LoginResponse> => {
+  const response = await httpClient.get<LoginResponse>("/api/admin/login",{headers: { Authorization: `Basic ${btoa(`${body.username}:${body.password}`)}` }});
+  return response.data;
+};
+
 // --- ฟังก์ชันสำหรับล็อกอิน สำหรับ destructure data --- //
 // export const login = async (body: LoginBody): Promise<LoginResponse> => {
 //   const { data } = await httpClient.post<LoginResponse>("/api/auth/login",body);

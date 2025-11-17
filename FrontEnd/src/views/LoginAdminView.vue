@@ -5,7 +5,8 @@ import { jwtDecode } from 'jwt-decode';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuth } from '../composables/useAuth';
-import { login } from '../services/auth.service';
+import { loginAdmin } from '../services/auth.service';
+
 
 const { setToken, setUser } = useAuth();
 
@@ -39,17 +40,11 @@ async function onSubmit() {
 
   loading.value = true; // ตั้งสถานะกำลังโหลด
   try {
-    const res = await login(form.value); // เรียก API เพื่อทำการล็อกอิน
+    const res = await loginAdmin(form.value); // เรียก API เพื่อทำการล็อกอิน
     const token = res.token;
     setToken(token); // เก็บ token ใน local storage ด้วย useAuth composable
 
-    // // ดึง role จาก JWT
-    // const payload: any = decodeJWT(token);
-    // console.log("Login successful. Decoded payload:", payload);
-    // const role = payload?.role
-    //   ?? payload?.roles?.[0]; // กรณีมีหลาย role ให้เอาอันแรก
-
-    // ดึง role จาก JWT
+    // ใช้ library jwt-decode ในการถอดรหัส JWT
     const payload: any = jwtDecode(token);
     console.log("Login successful. Decoded payload:", payload);
     const role = payload?.role
@@ -83,7 +78,7 @@ async function onSubmit() {
 </script>
 
 <template>
-  <form class="space-y-3" @submit.prevent="onSubmit">
+  <form class="space-y-3" @submit.prevent="onSubmit"> 
     <div>
       <label class="block text-sm mb-1">Username</label>
       <input v-model="form.username" class="w-full border rounded-lg px-2 py-2 focus:outline-none"

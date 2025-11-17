@@ -29,6 +29,18 @@ const routes : RouteRecordRaw[] = [
     ]
   }, 
   {
+    path : "/admin/login",
+    component: () => import('../layouts/AdminLayout.vue'), 
+    children: [
+      {
+        path : "", 
+        name : "AdminLogin",
+        component : () => import('../views/LoginAdminView.vue'), 
+        meta : { public : true }, // กำหนดว่าเส้นทางนี้เป็นสาธารณะ (ไม่ต้องล็อกอิน)
+      }
+    ]
+  }, 
+  {
     path : "/products",
     component: () => import('../layouts/UserLayout.vue'), 
     children: [

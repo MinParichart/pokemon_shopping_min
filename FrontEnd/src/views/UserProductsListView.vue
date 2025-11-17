@@ -12,6 +12,7 @@ async function load() {
   try {
     const response = await httpClient.get('/api/products');
     items.value = response.data ?? [];
+    console.log("Products loaded:", items.value);
   } catch (error: any) {
     error.value = error.response?.data?.message || 'Failed to load products.';
   } finally {
