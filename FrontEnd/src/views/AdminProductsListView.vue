@@ -64,7 +64,8 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
+import { onMounted } from 'vue';
 import type { Product } from '../models/product.model';
 import { productsService } from '../services/products.service';
 

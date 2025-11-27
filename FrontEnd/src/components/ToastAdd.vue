@@ -10,9 +10,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue';
+import { defineEmits, defineProps, ref, watchEffect } from 'vue';
 
-// บอกว่าลูกจะรับข้อมูลอะไรจากแม่บ้าง 
 const props = defineProps<{
   message: string;
   duration?: number;
