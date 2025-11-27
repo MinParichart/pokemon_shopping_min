@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-6xl mx-auto">
+  <div class="max-w-6xl mx-auto py-8">
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
       <!-- หัวการ์ด -->
       <div class="px-10 pt-6 pb-3 border-b border-slate-200/70">
@@ -10,8 +10,8 @@
       <div class="px-10 pt-4 pb-4 border-b border-slate-200/70">
         <div class="flex text-sm rounded-lg overflow-hidden bg-slate-100">
           <button v-for="tab in tabs" :key="tab.value" class="flex-1 py-2 text-center" :class="tab.value === currentStatus
-            ? 'bg-emerald-500 text-white font-medium'
-            : 'bg-slate-100 text-slate-600'
+              ? 'bg-emerald-500 text-white font-medium'
+              : 'bg-slate-100 text-slate-600'
             " @click="currentStatus = tab.value">
             {{ tab.label }}
           </button>
@@ -40,15 +40,17 @@
 
         <!-- แถวคำสั่งซื้อ -->
         <div v-for="order in filteredOrders" :key="order.id" class="border-b border-slate-200/70 last:border-b-0">
+          <!-- แถวหลัก -->
           <div class="grid grid-cols-[1.3fr_1.4fr_1fr_1fr_0.6fr] px-10 py-3 items-center text-sm hover:bg-slate-50">
             <!-- รหัส -->
             <div class="text-left">
-              {{ order.orderCode ?? order.id.toString().padStart(6, "0") }}
+              {{ order.orderCode ?? order.id.toString().padStart(6, '0') }}
             </div>
 
             <!-- จำนวน -->
             <div class="text-center text-slate-700">
-              {{ countItems(order) }} รายการ {{ countQuantity(order) }} ชิ้น
+              {{ countItems(order) }} รายการ
+              {{ countQuantity(order) }} ชิ้น
             </div>
 
             <!-- ราคารวม -->
@@ -76,76 +78,78 @@
             </div>
           </div>
 
-          <!-- รายละเอียดการสั่งซื้อ -->
-          <div v-for="detail in order.orderDetails" :key="detail.productId + '-' + detail.quantity"
-            class="flex items-center justify-between py-3 border-b border-slate-100 last:border-b-0">
-            <!-- ซ้าย: รูป + ชื่อ + หมวดหมู่ -->
-            <div class="flex items-center gap-3">
-              <!-- ใช้ image จาก product object หรือจาก productImageUrl ก็ได้ -->
-              <img v-if="detail.product?.imageUrl || detail.productImageUrl"
-                :src="detail.product?.imageUrl ?? detail.productImageUrl" alt="" class="w-10 h-10 object-contain" />
-              <div>
-                <div class="text-slate-800">
-                  {{
-                    detail.product?.name ??
-                    detail.productName ??
-                    'สินค้า #' + detail.productId
-                  }}
-                  <span class="text-slate-500">
-                    x {{ detail.quantity }}
-                  </span>
+          <!-- รายละเอียดการสั่งซื้อ + สรุปราคา (แสดงเมื่อกดลูกศร) -->
+          <div v-if="expandedIds.has(order.id)" class="px-10 pb-4 bg-white">
+            <!-- รายละเอียดรายการสินค้า -->
+            <div class="border-t border-slate-200/70 pt-3">
+              <div v-for="detail in order.orderDetails" :key="detail.productId + '-' + detail.quantity"
+                class="flex items-center justify-between py-3 border-b border-slate-100 last:border-b-0">
+                <!-- ซ้าย: รูป + ชื่อ + หมวดหมู่ -->
+                <div class="flex items-center gap-3">
+                  <img v-if="detail.product?.imageUrl || detail.productImageUrl"
+                    :src="detail.product?.imageUrl ?? detail.productImageUrl" alt="" class="w-10 h-10 object-contain" />
+                  <div>
+                    <div class="text-slate-800">
+                      {{
+                        detail.product?.name ??
+                        detail.productName ??
+                        'สินค้า #' + detail.productId
+                      }}
+                      <span class="text-slate-500">
+                        x {{ detail.quantity }}
+                      </span>
+                    </div>
+                    <div class="text-xs text-slate-400">
+                      หมวดหมู่:
+                      {{
+                        detail.product?.category ??
+                        detail.productCategory ??
+                        'Pokemon'
+                      }}
+                    </div>
+                  </div>
                 </div>
-                <div class="text-xs text-slate-400">
-                  หมวดหมู่:
-                  {{
-                    detail.product?.category ??
-                    detail.productCategory ??
-                    'Pokemon'
+
+                <!-- ขวา: ราคาแถวนี้ -->
+                <div class="text-sm">
+                  ฿{{
+                    (detail.price ?? detail.product?.price ?? 0) *
+                    detail.quantity
                   }}
                 </div>
               </div>
             </div>
 
-            <!-- ขวา: ราคาแถวนี้ -->
-            <div class="text-sm">
-              ฿{{
-                (detail.price ?? detail.product?.price ?? 0) * detail.quantity
-              }}
+            <!-- แถวสรุปรวมด้านขวาล่าง -->
+            <div class="flex justify-end mt-3 pt-2 border-t border-slate-200/70 text-sm">
+              <span class="text-slate-600 mr-2">รวมทั้งหมด:</span>
+              <span class="font-semibold text-emerald-600">
+                ฿{{ order.totalAmount ?? calcTotal(order) }}
+              </span>
             </div>
-          </div>
-
-
-          <!-- แถวสรุปรวมด้านขวาล่าง -->
-          <div class="flex justify-end mt-3 pt-2 border-t border-slate-200/70 text-sm">
-            <span class="text-slate-600 mr-2">รวมทั้งหมด:</span>
-            <span class="font-semibold text-emerald-600">
-              ฿{{ order.totalAmount ?? calcTotal(order) }}
-            </span>
           </div>
         </div>
       </div>
     </div>
   </div>
-  </div>
-  </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
-import type { Order, OrderStatus } from "../models/order.model";
-import { ordersService } from "../services/orders.service";
+import { computed, onMounted, ref } from 'vue';
+import type { Order, OrderStatus } from '../models/order.model';
+import { ordersService } from '../services/orders.service';
 
 const orders = ref<Order[]>([]);
 const loading = ref(false);
 const expandedIds = ref<Set<number>>(new Set());
-const currentStatus = ref<"ALL" | OrderStatus>("ALL");
+const currentStatus = ref<'ALL' | OrderStatus>('ALL');
 
-const tabs: { value: "ALL" | OrderStatus; label: string }[] = [
-  { value: "ALL", label: "ทั้งหมด" },
-  { value: "PENDING", label: "รอการยืนยันคำสั่งซื้อ" },
-  { value: "CONFIRMED", label: "ยืนยันคำสั่งซื้อ" },
-  { value: "REJECTED", label: "ปฏิเสธคำสั่งซื้อ" },
-  { value: "CANCELLED", label: "ยกเลิกคำสั่งซื้อ" },
+const tabs: { value: 'ALL' | OrderStatus; label: string }[] = [
+  { value: 'ALL', label: 'ทั้งหมด' },
+  { value: 'PENDING', label: 'รอการยืนยันคำสั่งซื้อ' },
+  { value: 'CONFIRMED', label: 'ยืนยันคำสั่งซื้อ' },
+  { value: 'REJECTED', label: 'ปฏิเสธคำสั่งซื้อ' },
+  { value: 'CANCELLED', label: 'ยกเลิกคำสั่งซื้อ' }
 ];
 
 onMounted(load);
@@ -154,16 +158,15 @@ async function load() {
   loading.value = true;
   try {
     const res = await ordersService.getOrders();
-    console.log("orders from api >>>", JSON.stringify(res, null, 2));
+    console.log('orders from api >>>', JSON.stringify(res, null, 2));
     orders.value = res;
   } finally {
     loading.value = false;
   }
 }
 
-
 const filteredOrders = computed(() => {
-  if (currentStatus.value === "ALL") return orders.value;
+  if (currentStatus.value === 'ALL') return orders.value;
   return orders.value.filter((o) => o.status === currentStatus.value);
 });
 
@@ -184,14 +187,14 @@ function countQuantity(order: Order): number {
 
 function statusText(status: OrderStatus): string {
   switch (status) {
-    case "PENDING":
-      return "รอการยืนยันคำสั่งซื้อ";
-    case "CONFIRMED":
-      return "ยืนยันคำสั่งซื้อ";
-    case "REJECTED":
-      return "ปฏิเสธคำสั่งซื้อ";
-    case "CANCELLED":
-      return "ยกเลิกคำสั่งซื้อ";
+    case 'PENDING':
+      return 'รอการยืนยันคำสั่งซื้อ';
+    case 'CONFIRMED':
+      return 'ยืนยันคำสั่งซื้อ';
+    case 'REJECTED':
+      return 'ปฏิเสธคำสั่งซื้อ';
+    case 'CANCELLED':
+      return 'ยกเลิกคำสั่งซื้อ';
     default:
       return status;
   }
@@ -205,9 +208,9 @@ function toggleExpand(id: number) {
 }
 
 async function cancelOrder(id: number) {
-  const ok = confirm("ต้องการยกเลิกคำสั่งซื้อนี้หรือไม่?");
+  const ok = confirm('ต้องการยกเลิกคำสั่งซื้อนี้หรือไม่?');
   if (!ok) return;
-  await ordersService.updateOrder(id, { status: "CANCELLED" });
+  await ordersService.updateOrder(id, { status: 'CANCELLED' });
   await load();
 }
 </script>

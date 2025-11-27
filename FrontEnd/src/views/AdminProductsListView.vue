@@ -2,15 +2,12 @@
   <div>
     <div class="flex items-center justify-between mb-4">
       <h1 class="text-2xl font-semibold">จัดการสินค้า</h1>
-      <RouterLink
-        to="/admin/products/new"
-        class="bg-emerald-500 text-white text-sm px-4 py-2 rounded-lg"
-      >
+      <RouterLink to="/admin/products/new" class="bg-emerald-500 text-white text-sm px-4 py-2 rounded-lg">
         เพิ่มสินค้าใหม่
       </RouterLink>
     </div>
 
-    <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
       <table class="w-full text-sm">
         <thead class="bg-slate-50">
           <tr>
@@ -23,33 +20,19 @@
           </tr>
         </thead>
         <tbody>
-          <tr
-            v-for="p in products"
-            :key="p.id"
-            class="border-t hover:bg-slate-50"
-          >
+          <tr v-for="p in products" :key="p.id" class="border-t border-gray-200 hover:bg-slate-50">
             <td class="px-4 py-2">
-              <img
-                :src="p.imageUrl"
-                :alt="p.name"
-                class="w-10 h-10 object-contain"
-              />
+              <img :src="p.imageUrl" :alt="p.name" class="w-10 h-10 object-contain" />
             </td>
             <td class="px-4 py-2">{{ p.name }}</td>
             <td class="px-4 py-2 text-right">฿{{ p.price }}</td>
             <td class="px-4 py-2 text-right">{{ p.stock }}</td>
             <td class="px-4 py-2">{{ p.category }}</td>
             <td class="px-4 py-2 text-center">
-              <RouterLink
-                :to="`/admin/products/${p.id}/edit`"
-                class="text-xs text-emerald-600 mr-3"
-              >
+              <RouterLink :to="`/admin/products/${p.id}/edit`" class="text-xs text-emerald-600 mr-3">
                 แก้ไข
               </RouterLink>
-              <button
-                class="text-xs text-red-500"
-                @click="remove(p.id)"
-              >
+              <button class="text-xs text-red-500" @click="remove(p.id)">
                 ลบ
               </button>
             </td>
@@ -64,8 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import type { Product } from '../models/product.model';
 import { productsService } from '../services/products.service';
 

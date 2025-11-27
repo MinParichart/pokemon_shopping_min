@@ -22,6 +22,9 @@
           </RouterLink>
 
           <button class="flex items-center gap-1 text-slate-700" @click="logoutToLogin">
+            <span class="material-symbols-outlined">
+              account_circle
+            </span>
             <span>ออกจากระบบ</span>
           </button>
         </div>
