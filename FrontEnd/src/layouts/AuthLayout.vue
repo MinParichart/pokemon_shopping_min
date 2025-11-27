@@ -1,14 +1,17 @@
 <template>
-  <!-- กรอบหน้า Login ไม่ใส่ Logic/เรียก API -->
-  <div class="min-h-screen grid place-items-center bg-gray-50">
-    <div class="w-full max-w-sm bg-white shadow-md rounded-2xl p-6">
-      <header class="mb-4">
-        <h1 class="text-xl font-bold text-center">Pokemon Shopping</h1>
-        <p class="text-center text-sm text-gray-500">Sign in to continue</p>
-      </header>
-
-      <!-- หน้า (View) จะถูกแสดงตรงนี้ -->
-      <router-view />
+  <div class="min-h-screen flex items-center justify-center bg-slate-100">
+    <div class="w-full max-w-md bg-white rounded-xl shadow-md p-8">
+      <div class="flex flex-col items-center mb-6">
+        <div class="w-48 h-20 bg-slate-800 text-white flex items-center justify-center rounded-lg mb-4 text-lg font-semibold tracking-widest">
+          WUNCA
+        </div>
+        <p class="text-xs text-slate-500">45th WUNCA - Pokemon Shopping</p>
+      </div>
+      <RouterView />
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { RouterView } from 'vue-router';
+</script>

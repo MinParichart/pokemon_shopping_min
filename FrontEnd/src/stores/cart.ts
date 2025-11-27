@@ -1,39 +1,59 @@
-import { defineStore } from "pinia";
-import type { Product, CartItem } from "../models/product.model";
+import { defineStore } from 'pinia';
+import type { CartItem } from '../models/cart.model';
+import type { Product } from '../models/product.model';
 
-export const useCartStore = defineStore("cart", {
-  state: () => ({
-    items: [] as CartItem[],
+interface CartState {
+  items: CartItem[];
+}
+
+export const useCartStore = defineStore('cart', {
+  state: (): CartState => ({
+    items: []
   }),
   getters: {
-    // คำนวณราคารวมของสินค้าทั้งหมดในตะกร้า
-    count: (state) =>
-      state.items.reduce((round, item) => round + item.quantity, 0),
-    totalPrice: (state) =>
-      state.items.reduce(
-        (total, item) => total + item.product.price * item.quantity,
+    count(state): number {
+      return state.items.reduce((sum, item) => sum + item.quantity, 0);
+    },
+    selectedItems(state): CartItem[] {
+      return state.items.filter((i) => i.selected);
+    },
+    totalPrice(state): number {
+      return state.items.reduce(
+        (sum, item) => sum + (item.selected ? item.product.price * item.quantity : 0),
         0
-      ),
+      );
+    },
+    totalSelectedQuantity(): number {
+      return this.selectedItems.reduce((sum, i) => sum + i.quantity, 0);
+    }
   },
   actions: {
-    // เพิ่มสินค้าลงในตะกร้า
-    addToCart(product: Product, quantity: number) {
-      const existingItem = this.items.find(
-        (item) => item.product.id === product.id
-      );
-      if (existingItem) {
-        existingItem.quantity += quantity;
+    addProduct(product: Product) {
+      const existing = this.items.find((i) => i.product.id === product.id);
+      if (existing) {
+        existing.quantity += 1;
       } else {
-        this.items.push({ product, quantity });
+        this.items.push({ product, quantity: 1, selected: true });
       }
     },
-    // ลบสินค้าจากตะกร้า
-    removeFromCart(productId: number) {
-      this.items = this.items.filter((item) => item.product.id !== productId);
+    removeProduct(productId: number) {
+      this.items = this.items.filter((i) => i.product.id !== productId);
     },
-    // เคลียร์ตะกร้าสินค้า
+    setQuantity(productId: number, quantity: number) {
+      const item = this.items.find((i) => i.product.id === productId);
+      if (!item) return;
+      item.quantity = Math.max(1, quantity);
+    },
+    toggleSelected(productId: number) {
+      const item = this.items.find((i) => i.product.id === productId);
+      if (!item) return;
+      item.selected = !item.selected;
+    },
+    setAllSelected(value: boolean) {
+      this.items.forEach((i) => (i.selected = value));
+    },
     clearCart() {
       this.items = [];
-    },
-  },
+    }
+  }
 });

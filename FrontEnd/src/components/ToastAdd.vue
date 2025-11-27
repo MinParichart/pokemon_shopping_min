@@ -1,30 +1,47 @@
 <template>
   <transition name="fade">
-    <div v-if="visible" class="fixed bottom-6 right-6 bg-white border shadow-lg rounded-xl px-4 py-3 text-sm">
-      ✅ {{ text }}
+    <div v-if="visible"
+      class="fixed bottom-4 right-4 bg-white border border-emerald-200 shadow-lg rounded-lg px-4 py-3 flex items-center gap-2">
+      <div class="w-2 h-2 rounded-full bg-emerald-500" />
+      <p class="text-sm text-slate-800">{{ message }}</p>
+      <button class="text-xs text-slate-400 ml-3" @click="close">x</button>
     </div>
   </transition>
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect } from "vue";
-import { defineProps, defineEmits } from "vue";
+import { ref, watchEffect } from 'vue';
 
-// กำหนด props และ emits เพื่อ
-const props = defineProps<{ text: string; show: boolean }>();
-const emit = defineEmits<{ (emit: "close"): void }>();
+// บอกว่าลูกจะรับข้อมูลอะไรจากแม่บ้าง 
+const props = defineProps<{
+  message: string;
+  duration?: number;
+}>();
 
-const visible = ref(false);
+const emit = defineEmits<{
+  (event: 'close'): void;
+}>();
+
+const visible = ref(true);
+
+function close() {
+  visible.value = false;
+  emit('close');
+}
+
 watchEffect(() => {
-  visible.value = props.show;
-  if (props.show) setTimeout(() => emit("close"), 1800);
+  if (!props.duration) return;
+  const timer = setTimeout(() => {
+    close();
+  }, props.duration);
+  return () => clearTimeout(timer);
 });
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity .2s;
+  transition: opacity 0.2s ease;
 }
 
 .fade-enter-from,

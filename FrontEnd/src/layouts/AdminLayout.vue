@@ -1,33 +1,44 @@
-<script setup lang="ts">
-import { useRouter } from 'vue-router';
-const router = useRouter();
-
-function logout() {
-  localStorage.removeItem('token');
-  router.replace({ name: 'Login' });
-}
-
-</script>
-
 <template>
-  <div class="min-h-screen bg-gray-50">
-
-    <header class="sticky top-0 bg-white border-b px-6 py-3 flex justify-between">
-      <h1 class="font-semibold">Admin</h1>
-      <nav class="space-x-3 text-sm">
-        <!-- router-link คือ ปุ่มหรือลิงก์ที่เปลี่ยนหน้าใน Vue โดยไม่ reload ทั้งหน้าเว็บ”  -->
-        <router-link class="underline" :to="{ name: 'AdminProducts' }">
-          Products
-        </router-link>
-        <button class="underline" @click="logout">
-          Logout
+  <div class="min-h-screen flex bg-slate-100">
+    <aside class="w-64 bg-white shadow-md">
+      <div class="px-4 py-4 border-b flex items-center gap-2">
+        <div class="w-28 h-9 bg-slate-800 text-white flex items-center justify-center rounded-md text-xs font-semibold tracking-widest">
+          WUNCA
+        </div>
+        <span class="font-semibold text-sm text-slate-700">ADMIN</span>
+      </div>
+      <nav class="p-4 flex flex-col gap-2 text-sm">
+        <RouterLink
+          to="/admin/orders"
+          class="px-3 py-2 rounded hover:bg-emerald-50"
+          active-class="bg-emerald-100 text-emerald-700 font-medium"
+        >
+          จัดการการสั่งซื้อ
+        </RouterLink>
+        <RouterLink
+          to="/admin/products"
+          class="px-3 py-2 rounded hover:bg-emerald-50"
+          active-class="bg-emerald-100 text-emerald-700 font-medium"
+        >
+          สินค้า
+        </RouterLink>
+        <button
+          class="mt-4 text-left px-3 py-2 rounded text-red-500 hover:bg-red-50"
+          @click="logoutToAdminLogin"
+        >
+          ออกจากระบบ
         </button>
       </nav>
-    </header>
+    </aside>
 
-    <main class="max-w-6xl mx-auto">
-      <!-- router-view คือ จุดวางเนื้อหา ของหน้า (component) ที่ตรงกับ route ปัจจุบันใน Vue Router -->
-      <router-view />
+    <main class="flex-1 p-6">
+      <RouterView />
     </main>
   </div>
 </template>
+
+<script setup lang="ts">
+import { useAuth } from '../composables/useAuth';
+
+const { logoutToAdminLogin } = useAuth();
+</script>

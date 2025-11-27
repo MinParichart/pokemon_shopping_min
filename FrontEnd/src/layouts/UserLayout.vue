@@ -1,33 +1,58 @@
-<script setup lang="ts">
-import { useRouter } from 'vue-router';
-const router = useRouter();
-
-function logout() {
-  localStorage.removeItem('token');
-  router.replace({ name: 'Login' });
-}
-
-</script>
-
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen flex flex-col bg-slate-50">
+    <header class="bg-white shadow-sm">
+      <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-32 h-10 bg-slate-800 text-white flex items-center justify-center rounded-md text-xs font-semibold tracking-widest">
+            WUNCA
+          </div>
+          <RouterLink
+            to="/products"
+            class="text-sm font-medium text-slate-700"
+          >
+            สินค้าทั้งหมด
+          </RouterLink>
+        </div>
 
-    <header class="sticky top-0 bg-white border-b px-6 py-3 flex justify-between">
-      <h1 class="font-semibold">User</h1>
-      <nav class="space-x-3 text-sm">
-        <!-- router-link คือ ปุ่มหรือลิงก์ที่เปลี่ยนหน้าใน Vue โดยไม่ reload ทั้งหน้าเว็บ”  -->
-        <router-link class="underline" :to="{ name: 'UserProducts' }">
-          Products
-        </router-link>
-        <button class="underline" @click="logout">
-          Logout
-        </button>
-      </nav>
+        <div class="flex items-center gap-4 text-sm">
+          <RouterLink
+            to="/cart"
+            class="relative flex items-center gap-1 text-slate-700"
+          >
+            <span class="material-icons text-base">shopping_cart</span>
+            <span>รถเข็น ({{ cart.count }})</span>
+          </RouterLink>
+
+          <RouterLink
+            to="/my-orders"
+            class="text-slate-700"
+          >
+            รายการสั่งซื้อของฉัน
+          </RouterLink>
+
+          <button
+            class="flex items-center gap-1 text-slate-700"
+            @click="logoutToLogin"
+          >
+            <span class="material-icons text-base">person</span>
+            <span>ออกจากระบบ</span>
+          </button>
+        </div>
+      </div>
     </header>
 
-    <main class="max-w-6xl mx-auto">
-      <!-- router-view คือ จุดวางเนื้อหา ของหน้า (component) ที่ตรงกับ route ปัจจุบันใน Vue Router -->
-      <router-view />
+    <main class="flex-1">
+      <div class="max-w-6xl mx-auto px-4 py-8">
+        <RouterView />
+      </div>
     </main>
   </div>
 </template>
+
+<script setup lang="ts">
+import { useAuth } from '../composables/useAuth';
+import { useCartStore } from '../stores/cart';
+
+const { logoutToLogin } = useAuth();
+const cart = useCartStore();
+</script>
