@@ -7,7 +7,11 @@
         v-for="tab in tabs"
         :key="tab.value"
         class="px-3 py-1 rounded-full border"
-        :class="tab.value === currentStatus ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white'"
+        :class="
+          tab.value === currentStatus
+            ? 'bg-emerald-500 text-white border-emerald-500'
+            : 'bg-white'
+        "
         @click="currentStatus = tab.value"
       >
         {{ tab.label }}
@@ -103,7 +107,7 @@ const tabs = [
   { value: 'PENDING', label: 'รอการยืนยันคำสั่งซื้อ' },
   { value: 'CONFIRMED', label: 'ยืนยันคำสั่งซื้อ' },
   { value: 'REJECTED', label: 'ปฏิเสธคำสั่งซื้อ' },
-  { value: 'CANCELLED', label: 'ยกเลิกคำสั่งซื้อ' }
+  { value: 'CANCELLED', label: 'ยกเลิกคำสั่งซื้อ' },
 ];
 
 onMounted(load);

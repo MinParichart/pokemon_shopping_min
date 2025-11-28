@@ -10,11 +10,20 @@
     <!-- ถ้ามีสินค้า -->
     <div v-else class="space-y-6">
       <!-- การ์ดรถเข็นหลัก -->
-      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+      <div
+        class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden"
+      >
         <!-- แถวบนสุดในการ์ด : เลือกทั้งหมด + จำนวนรายการ -->
-        <div class="flex items-center justify-between px-6 pt-4 pb-3 text-sm border-b border-slate-200/70">
+        <div
+          class="flex items-center justify-between px-6 pt-4 pb-3 text-sm border-b border-slate-200/70"
+        >
           <div class="flex items-center gap-2">
-            <input type="checkbox" :checked="allSelected" @change="toggleSelectAll" class="cart-checkbox" />
+            <input
+              type="checkbox"
+              :checked="allSelected"
+              @change="toggleSelectAll"
+              class="cart-checkbox"
+            />
             <span>เลือกทั้งหมด</span>
           </div>
 
@@ -34,9 +43,15 @@
               <th class="text-center px-4 py-2">
                 <div class="flex items-center gap-2 text-slate-600">
                   <div class="flex items-center gap-2 text-slate-600">
-                    <span class="inline-block w-2 h-2 rounded-full bg-red-500" />
-                    <button type="button" class="hover:underline disabled:text-slate-300"
-                      :disabled="cart.selectedItems.length === 0" @click="removeSelected">
+                    <span
+                      class="inline-block w-2 h-2 rounded-full bg-red-500"
+                    />
+                    <button
+                      type="button"
+                      class="hover:underline disabled:text-slate-300"
+                      :disabled="cart.selectedItems.length === 0"
+                      @click="removeSelected"
+                    >
                       ลบที่เลือก
                     </button>
                   </div>
@@ -46,18 +61,29 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in cart.items" :key="item.product.id"
-              class="border-b border-slate-100 last:border-b-0 hover:bg-slate-50/60">
+            <tr
+              v-for="item in cart.items"
+              :key="item.product.id"
+              class="border-b border-slate-100 last:border-b-0 hover:bg-slate-50/60"
+            >
               <!-- checkbox เลือก -->
               <td class="px-4 text-center align-middle">
-                <input type="checkbox" :checked="item.selected" @change="cart.toggleSelected(item.product.id)"
-                  class="cart-checkbox" />
+                <input
+                  type="checkbox"
+                  :checked="item.selected"
+                  @change="cart.toggleSelected(item.product.id)"
+                  class="cart-checkbox"
+                />
               </td>
 
               <!-- รูป + ชื่อสินค้า -->
               <td class="px-2 py-3">
                 <div class="flex items-center gap-3">
-                  <img :src="item.product.imageUrl" :alt="item.product.name" class="w-24 h-24 object-contain" />
+                  <img
+                    :src="item.product.imageUrl"
+                    :alt="item.product.name"
+                    class="w-24 h-24 object-contain"
+                  />
                   <div>
                     <div class="font-medium text-slate-800">
                       {{ item.product.name }}
@@ -76,16 +102,22 @@
 
               <!-- จำนวน -->
               <td class="px-4 text-center">
-                <div class="inline-flex items-center border border-slate-300 rounded-lg overflow-hidden">
-                  <button class="px-3 py-1 text-xl text-red-500  hover:bg-red-200"
-                    @click="changeQty(item.product.id, item.quantity - 1)">
+                <div
+                  class="inline-flex items-center border border-slate-300 rounded-lg overflow-hidden"
+                >
+                  <button
+                    class="px-3 py-1 text-xl text-red-500 hover:bg-red-200"
+                    @click="changeQty(item.product.id, item.quantity - 1)"
+                  >
                     −
                   </button>
                   <span class="px-4 select-none">
                     {{ item.quantity }}
                   </span>
-                  <button class="px-3 py-1 text-xl text-green-500 hover:bg-green-200"
-                    @click="changeQty(item.product.id, item.quantity + 1)">
+                  <button
+                    class="px-3 py-1 text-xl text-green-500 hover:bg-green-200"
+                    @click="changeQty(item.product.id, item.quantity + 1)"
+                  >
                     +
                   </button>
                 </div>
@@ -99,7 +131,10 @@
               <!-- ปุ่มลบ -->
               <td></td>
               <td class="px-4 text-center">
-                <button class="text-xs text-red-500 hover:text-red-600" @click="cart.removeProduct(item.product.id)">
+                <button
+                  class="text-xs text-red-500 hover:text-red-600"
+                  @click="cart.removeProduct(item.product.id)"
+                >
                   <span class="material-symbols-outlined"> delete </span>
                 </button>
               </td>
@@ -126,11 +161,13 @@
           </div>
           <div class="flex items-center gap-4">
             <span class="text-red-500 font-semibold text-xl">
-              ฿{{ cart.totalPrice }}
+              ฿{{ formatPrice(cart.totalPrice) }}
             </span>
             <button
               class="bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-2 rounded-lg text-sm disabled:bg-emerald-300"
-              @click="openAddress" :disabled="cart.selectedItems.length === 0">
+              @click="openAddress"
+              :disabled="cart.selectedItems.length === 0"
+            >
               สั่งสินค้า
             </button>
           </div>
@@ -139,22 +176,33 @@
     </div>
 
     <!-- Modal กรอกที่อยู่จัดส่ง -->
-    <div v-if="showAddress" class="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
+    <div
+      v-if="showAddress"
+      class="fixed inset-0 bg-black/30 flex items-center justify-center z-50"
+    >
       <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-lg">
         <h2 class="text-lg font-semibold mb-2 text-center">
           ยืนยันการสั่งซื้อ
         </h2>
         <p class="text-sm mb-3 text-center">โปรดกรอกที่อยู่จัดส่งสินค้า</p>
-        <textarea v-model="shippingAddress" rows="3" class="w-full border rounded-lg px-3 py-2 text-sm mb-4"></textarea>
+        <textarea
+          v-model="shippingAddress"
+          rows="3"
+          class="w-full border rounded-lg px-3 py-2 text-sm mb-4"
+        ></textarea>
         <div class="flex justify-end gap-3">
-          <button class="px-4 py-2 text-sm rounded-lg border border-slate-300 hover:bg-slate-50"
-            @click="showAddress = false">
+          <button
+            class="px-4 py-2 text-sm rounded-lg border border-slate-300 hover:bg-slate-50"
+            @click="showAddress = false"
+          >
             ยกเลิก
           </button>
           <button
             class="px-4 py-2 text-sm rounded-lg bg-emerald-500 text-white hover:bg-emerald-600 disabled:bg-emerald-300"
-            :disabled="loading" @click="confirmOrder">
-            {{ loading ? "กำลังสั่งซื้อ..." : "ยืนยัน" }}
+            :disabled="loading"
+            @click="confirmOrder"
+          >
+            {{ loading ? 'กำลังสั่งซื้อ...' : 'ยืนยัน' }}
           </button>
         </div>
         <p v-if="error" class="mt-2 text-xs text-red-500">
@@ -166,16 +214,16 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import { ordersService } from "../services/orders.service";
-import { useCartStore } from "../stores/cart";
+import { computed, ref } from 'vue';
+import { ordersService } from '../services/orders.service';
+import { useCartStore } from '../stores/cart';
 
 const cart = useCartStore();
 
 const showAddress = ref(false);
-const shippingAddress = ref("");
+const shippingAddress = ref('');
 const loading = ref(false);
-const error = ref("");
+const error = ref('');
 
 // checkbox “เลือกทั้งหมด” (ด้านบน + ด้านล่างใช้ตัวเดียวกัน)
 const allSelected = computed(
@@ -202,9 +250,9 @@ function openAddress() {
 }
 
 async function confirmOrder() {
-  error.value = "";
+  error.value = '';
   if (!shippingAddress.value.trim()) {
-    error.value = "กรุณากรอกที่อยู่จัดส่งสินค้า";
+    error.value = 'กรุณากรอกที่อยู่จัดส่งสินค้า';
     return;
   }
 
@@ -221,10 +269,14 @@ async function confirmOrder() {
     cart.clearCart();
     showAddress.value = false;
   } catch (_e) {
-    error.value = "สั่งซื้อไม่สำเร็จ";
+    error.value = 'สั่งซื้อไม่สำเร็จ';
   } finally {
     loading.value = false;
   }
+}
+
+function formatPrice(value: number | string) {
+  return Number(value).toLocaleString('th-TH');
 }
 </script>
 

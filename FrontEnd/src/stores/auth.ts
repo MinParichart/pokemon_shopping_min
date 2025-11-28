@@ -6,7 +6,7 @@ import { decodeJWT, isTokenExpired } from '../utils/jwt';
 interface AuthState {
   token: string | null;
   payload: JwtPayload | null;
-  // ✅ เพิ่ม flag สำหรับแยกว่า login ผ่าน admin หรือไม่
+  // เพิ่ม flag สำหรับแยกว่า login ผ่าน admin หรือไม่
   isAdminLogin: boolean;
 }
 
@@ -18,7 +18,7 @@ export const useAuthStore = defineStore('auth', {
     token: localStorage.getItem(TOKEN_KEY),
     payload: null,
     // โหลด flag จาก localStorage เผื่อรีเฟรชหน้า
-    isAdminLogin: localStorage.getItem(ADMIN_FLAG_KEY) === '1'
+    isAdminLogin: localStorage.getItem(ADMIN_FLAG_KEY) === '1',
   }),
   getters: {
     isAuthenticated(state): boolean {
@@ -37,7 +37,7 @@ export const useAuthStore = defineStore('auth', {
     },
     username(state): string | undefined {
       return state.payload?.username ?? state.payload?.sub;
-    }
+    },
   },
   actions: {
     initFromToken() {
@@ -81,6 +81,6 @@ export const useAuthStore = defineStore('auth', {
       // ✅ เคลียร์สถานะ admin ด้วย
       this.isAdminLogin = false;
       localStorage.setItem(ADMIN_FLAG_KEY, '0');
-    }
-  }
+    },
+  },
 });

@@ -3,14 +3,13 @@
 
 // const state = reactive<{ registerUser: RegisterUser | null, loggedIn:boolean }>({
 //   registerUser: null,
-//   loggedIn: false,  
+//   loggedIn: false,
 // });
 
 // export function useAuth() {
 //   function setToken(token: string) {
 //     localStorage.setItem('token', token);
 //   }
-
 
 // function getToken() : string | null {
 //   return localStorage.getItem('token');
@@ -26,7 +25,6 @@
 //   state.registerUser = null;
 //   state.loggedIn = false;
 // }
-
 
 // return { setToken, getToken, setUser, logout, state };
 
@@ -51,9 +49,7 @@ export function useAuth() {
 
     const redirect = route.query.redirect as string | undefined;
     const target =
-      redirect && redirect.startsWith('/admin')
-        ? redirect
-        : '/admin/orders';
+      redirect && redirect.startsWith('/admin') ? redirect : '/admin/orders';
 
     await router.replace(target);
   }
@@ -73,6 +69,6 @@ export function useAuth() {
     loginUser,
     loginAdmin,
     logoutToLogin,
-    logoutToAdminLogin
+    logoutToAdminLogin,
   };
 }

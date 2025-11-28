@@ -8,7 +8,7 @@
         <input
           v-model="form.username"
           required
-          class="w-full border rounded-lg px-3 py-2 text-sm"
+          class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
         />
       </div>
       <div>
@@ -16,7 +16,7 @@
         <input
           v-model="form.fullName"
           required
-          class="w-full border rounded-lg px-3 py-2 text-sm"
+          class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
         />
       </div>
       <div>
@@ -24,7 +24,7 @@
         <input
           v-model="form.phone"
           required
-          class="w-full border rounded-lg px-3 py-2 text-sm"
+          class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
         />
       </div>
       <div class="grid grid-cols-2 gap-3">
@@ -34,7 +34,7 @@
             v-model="form.password"
             type="password"
             required
-            class="w-full border rounded-lg px-3 py-2 text-sm"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
           />
         </div>
         <div>
@@ -43,7 +43,7 @@
             v-model="form.confirmPassword"
             type="password"
             required
-            class="w-full border rounded-lg px-3 py-2 text-sm"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
           />
         </div>
       </div>
@@ -84,7 +84,7 @@ const form = reactive<RegisterBody>({
   phone: '',
   password: '',
   confirmPassword: '',
-  role: 'user'
+  role: 'user',
 });
 
 const loading = ref(false);

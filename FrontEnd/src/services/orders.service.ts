@@ -21,6 +21,8 @@ export const ordersService = {
     return httpClient.post<Order>('/api/orders', body).then((r) => r.data);
   },
   updateOrder(orderId: number, body: UpdateOrderBody) {
-    return httpClient.put<Order>(`/api/orders/${orderId}`, body).then((r) => r.data);
-  }
+    return httpClient
+      .put<Order>(`/api/orders/${orderId}`, body)
+      .then((r) => r.data);
+  },
 };

@@ -9,17 +9,33 @@
           v-model="username"
           type="text"
           required
-          class="w-full border rounded-lg px-3 py-2 text-sm"
+          class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
         />
       </div>
+
       <div>
         <label class="block text-sm mb-1">Password</label>
-        <input
-          v-model="password"
-          type="password"
-          required
-          class="w-full border rounded-lg px-3 py-2 text-sm"
-        />
+
+        <!-- กล่อง input + รูปตา -->
+        <div class="relative">
+          <input
+            v-model="password"
+            :type="showPassword ? 'text' : 'password'"
+            required
+            class="w-full border border-gray-300 rounded-lg px-3 pr-10 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          />
+
+          <!-- ปุ่มรูปตา -->
+          <button
+            type="button"
+            class="absolute inset-y-0 right-0 px-3 flex items-center text-slate-400"
+            @click="showPassword = !showPassword"
+          >
+            <span class="material-symbols-outlined text-xl leading-none">
+              {{ showPassword ? 'visibility' : 'visibility_off' }}
+            </span>
+          </button>
+        </div>
       </div>
 
       <button
@@ -46,6 +62,9 @@ const username = ref('');
 const password = ref('');
 const loading = ref(false);
 const error = ref('');
+
+// state สำหรับเปิด/ปิด password
+const showPassword = ref(false);
 
 async function onSubmit() {
   loading.value = true;

@@ -1,7 +1,9 @@
 <template>
   <transition name="fade">
-    <div v-if="visible"
-      class="fixed bottom-4 right-4 bg-white border border-emerald-200 shadow-lg rounded-lg px-4 py-3 flex items-center gap-2">
+    <div
+      v-if="visible"
+      class="fixed bottom-4 right-4 bg-white border border-emerald-200 shadow-lg rounded-lg px-4 py-3 flex items-center gap-2"
+    >
       <div class="w-2 h-2 rounded-full bg-emerald-500" />
       <p class="text-sm text-slate-800">{{ message }}</p>
       <button class="text-xs text-slate-400 ml-3" @click="close">x</button>

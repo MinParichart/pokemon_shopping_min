@@ -4,39 +4,56 @@
     <!-- กล่องครอบช่องค้นหา -->
     <div class="relative w-full max-w-xl mx-auto mb-6">
       <!-- ไอคอน search -->
-      <span class="material-symbols-outlined
-           absolute left-3 top-1/2 -translate-y-1/2
-           text-slate-400 text-xl">
+      <span
+        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl"
+      >
         search
       </span>
 
       <!-- ช่องค้นหา -->
-      <input v-model="search" type="text" placeholder="ค้นหาสินค้าทั้งหมด"
-        class="w-full border border-gray-300 rounded-lg px-4 pl-10 py-2 text-sm" />
+      <input
+        v-model="search"
+        type="text"
+        placeholder="ค้นหาสินค้าทั้งหมด"
+        class="w-full border border-gray-500 rounded-lg px-4 pl-10 py-2 text-sm"
+      />
     </div>
 
     <div v-if="loading" class="text-sm text-slate-500">กำลังโหลด...</div>
 
-    <div v-else class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-      <ProductCard v-for="product in filteredProducts" :key="product.id" :product="product" @add="addToCart(product)" />
+    <div
+      v-else
+      class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-col"
+    >
+      <ProductCard
+        v-for="product in filteredProducts"
+        :key="product.id"
+        :product="product"
+        @add="addToCart(product)"
+      />
     </div>
 
-    <ToastAdd v-if="toastMessage" :message="toastMessage" :duration="2000" @close="toastMessage = ''" />
+    <ToastAdd
+      v-if="toastMessage"
+      :message="toastMessage"
+      :duration="2000"
+      @close="toastMessage = ''"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
-import ProductCard from "../components/ProductCard.vue";
-import ToastAdd from "../components/ToastAdd.vue";
-import type { Product } from "../models/product.model";
-import { productsService } from "../services/products.service";
-import { useCartStore } from "../stores/cart";
+import { computed, onMounted, ref } from 'vue';
+import ProductCard from '../components/ProductCard.vue';
+import ToastAdd from '../components/ToastAdd.vue';
+import type { Product } from '../models/product.model';
+import { productsService } from '../services/products.service';
+import { useCartStore } from '../stores/cart';
 
 const products = ref<Product[]>([]);
-const search = ref("");
+const search = ref('');
 const loading = ref(false);
-const toastMessage = ref("");
+const toastMessage = ref('');
 
 const cart = useCartStore();
 
@@ -56,7 +73,16 @@ onMounted(async () => {
 });
 
 function addToCart(p: Product) {
-  cart.addProduct(p);
+  // cart.addProduct() จะ return false ถ้าเกิน stock
+  const ok = cart.addProduct(p);
+
+  if (!ok) {
+    // แจ้งเตือนกรณีของในรถเข็นครบจำนวน stock แล้ว
+    toastMessage.value = `สินค้า "${p.name}" มีในสต็อกแค่ ${p.stock} ชิ้น และคุณเพิ่มครบแล้ว`;
+    return;
+  }
+
+  // กรณีเพิ่มได้ปกติ
   toastMessage.value = `เพิ่มสินค้า ${p.name} ลงในรถเข็นแล้ว`;
 }
 </script>

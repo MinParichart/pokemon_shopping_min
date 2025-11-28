@@ -8,7 +8,7 @@ interface CartState {
 
 export const useCartStore = defineStore('cart', {
   state: (): CartState => ({
-    items: []
+    items: [],
   }),
   getters: {
     count(state): number {
@@ -19,30 +19,53 @@ export const useCartStore = defineStore('cart', {
     },
     totalPrice(state): number {
       return state.items.reduce(
-        (sum, item) => sum + (item.selected ? item.product.price * item.quantity : 0),
+        (sum, item) =>
+          sum + (item.selected ? item.product.price * item.quantity : 0),
         0
       );
     },
     totalSelectedQuantity(): number {
       return this.selectedItems.reduce((sum, i) => sum + i.quantity, 0);
-    }
+    },
   },
   actions: {
-    addProduct(product: Product) {
-      const existing = this.items.find((i) => i.product.id === product.id);
-      if (existing) {
-        existing.quantity += 1;
-      } else {
-        this.items.push({ product, quantity: 1, selected: true });
+    addProduct(product: Product): boolean {
+      const item = this.items.find((i) => i.product.id === product.id);
+
+      const currentQty = item?.quantity ?? 0;
+
+      // ❗ถ้าจำนวนในรถเข็น >= stock แล้ว ไม่ให้เพิ่ม
+      if (currentQty >= product.stock) {
+        return false;
       }
+
+      if (item) {
+        item.quantity++;
+      } else {
+        this.items.push({
+          product,
+          quantity: 1,
+          selected: true,
+        });
+      }
+      return true;
     },
     removeProduct(productId: number) {
       this.items = this.items.filter((i) => i.product.id !== productId);
     },
-    setQuantity(productId: number, quantity: number) {
+    setQuantity(productId: number, q: number) {
       const item = this.items.find((i) => i.product.id === productId);
       if (!item) return;
-      item.quantity = Math.max(1, quantity);
+
+      // ลบถ้าใส่ 0 หรือติดลบ
+      if (q <= 0) {
+        this.items = this.items.filter((i) => i.product.id !== productId);
+        return;
+      }
+
+      // ❗ล็อกไม่ให้เกิน stock
+      const max = item.product.stock;
+      item.quantity = q > max ? max : q;
     },
     toggleSelected(productId: number) {
       const item = this.items.find((i) => i.product.id === productId);
@@ -54,6 +77,6 @@ export const useCartStore = defineStore('cart', {
     },
     clearCart() {
       this.items = [];
-    }
-  }
+    },
+  },
 });

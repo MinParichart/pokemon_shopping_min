@@ -93,7 +93,7 @@ const form = reactive<ProductPayload>({
   price: 0,
   stock: 0,
   category: '',
-  imageUrl: ''
+  imageUrl: '',
 });
 
 onMounted(async () => {
