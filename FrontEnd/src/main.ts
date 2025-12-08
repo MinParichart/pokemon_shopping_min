@@ -9,7 +9,7 @@ const pinia = createPinia();
 
 app.use(pinia);
 app.use(router);
-app.mount('#app');
+app.mount('#app'); 
 
 // debug ดูค่า env
 console.log('PORT : ', import.meta.env.VITE_API_BASE);

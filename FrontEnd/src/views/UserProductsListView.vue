@@ -46,10 +46,10 @@
 import { computed, onMounted, ref } from 'vue';
 import ProductCard from '../components/ProductCard.vue';
 import ToastAdd from '../components/ToastAdd.vue';
+
 import type { Product } from '../models/product.model';
 import { productsService } from '../services/products.service';
 import { useCartStore } from '../stores/cart';
-
 const products = ref<Product[]>([]);
 const search = ref('');
 const loading = ref(false);

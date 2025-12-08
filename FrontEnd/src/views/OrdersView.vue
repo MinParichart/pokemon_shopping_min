@@ -24,7 +24,7 @@
       <div
         v-for="order in filteredOrders"
         :key="order.id"
-        class="bg-white rounded-xl shadow-sm border p-4"
+        class="bg-white border border-gray-200 rounded-xl shadow-sm border p-4"
       >
         <div class="flex justify-between text-sm mb-2">
           <div>
@@ -95,8 +95,8 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
-import { ordersService } from '../services/orders.service';
 import type { Order } from '../models/order.model';
+import { ordersService } from '../services/orders.service';
 
 const orders = ref<Order[]>([]);
 const loading = ref(false);

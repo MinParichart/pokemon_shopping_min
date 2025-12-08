@@ -4,34 +4,22 @@
     <!-- หัวข้อ + ปุ่มเพิ่มสินค้า -->
     <div class="flex items-center justify-between">
       <h1 class="text-2xl font-semibold">จัดการสินค้า</h1>
-      <RouterLink
-        to="/admin/products/new"
-        class="bg-emerald-500 hover:bg-emerald-600 text-white text-sm px-5 py-2 rounded-lg shadow-sm"
-      >
+      <RouterLink to="/admin/products/new"
+        class="bg-emerald-500 hover:bg-emerald-600 text-white text-sm px-5 py-2 rounded-lg shadow-sm">
         เพิ่มสินค้าใหม่
       </RouterLink>
     </div>
 
     <!-- การ์ดหลักคล้ายรูปแรก -->
-    <div
-      class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden"
-    >
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
       <!-- แถวบน: ช่องค้นหา + จำนวนรายการ -->
-      <div
-        class="flex flex-wrap items-center justify-between gap-3 px-6 pt-4 pb-3 border-b border-slate-200/70"
-      >
+      <div class="flex flex-wrap items-center justify-between gap-3 px-6 pt-4 pb-3 border-b border-slate-200/70">
         <div class="relative w-full max-w-sm">
-          <span
-            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg"
-          >
+          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">
             search
           </span>
-          <input
-            v-model="keyword"
-            type="text"
-            placeholder="ค้นหาสินค้า"
-            class="w-full border border-slate-300 rounded-lg px-3 pl-9 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
-          />
+          <input v-model="keyword" type="text" placeholder="ค้นหาสินค้า"
+            class="w-full border border-slate-300 rounded-lg px-3 pl-9 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400" />
         </div>
 
         <p class="text-xs sm:text-sm text-slate-400">
@@ -53,18 +41,10 @@
         </thead>
 
         <tbody>
-          <tr
-            v-for="p in filteredProducts"
-            :key="p.id"
-            class="border-b border-slate-100 hover:bg-slate-50/60"
-          >
+          <tr v-for="p in filteredProducts" :key="p.id" class="border-b border-slate-100 hover:bg-slate-50/60">
             <!-- รูป -->
             <td class="px-6 py-4">
-              <img
-                :src="p.imageUrl"
-                :alt="p.name"
-                class="w-18 h-18 object-contain"
-              />
+              <img :src="p.imageUrl" :alt="p.name" class="w-18 h-18 object-contain" />
             </td>
 
             <!-- ชื่อ -->
@@ -87,16 +67,11 @@
 
             <!-- จัดการ -->
             <td class="px-6 py-4 text-center whitespace-nowrap">
-              <RouterLink
-                :to="`/admin/products/${p.id}/edit`"
-                class="text-xs text-emerald-600 hover:text-emerald-700 mr-4"
-              >
+              <RouterLink :to="`/admin/products/${p.id}/edit`"
+                class="text-xs text-emerald-600 hover:text-emerald-700 mr-4">
                 <span class="material-symbols-outlined"> edit </span>
               </RouterLink>
-              <button
-                class="text-xs text-red-500 hover:text-red-600"
-                @click="remove(p.id)"
-              >
+              <button class="text-xs text-red-500 hover:text-red-600" @click="remove(p.id)">
                 <span class="material-symbols-outlined"> delete </span>
               </button>
             </td>
@@ -105,10 +80,7 @@
       </table>
 
       <!-- ไม่มีผลลัพธ์ -->
-      <div
-        v-if="filteredProducts.length === 0"
-        class="px-6 py-5 text-sm text-slate-500"
-      >
+      <div v-if="filteredProducts.length === 0" class="px-6 py-5 text-sm text-slate-500">
         ไม่มีสินค้า
       </div>
     </div>

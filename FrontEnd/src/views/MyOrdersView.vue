@@ -224,6 +224,7 @@ function countQuantity(order: Order): number {
   return order.orderDetails.reduce((sum, d) => sum + d.quantity, 0);
 }
 
+// 
 function statusText(status: OrderStatus | string): string {
   const s = normalizeStatus(status as string);
   switch (s) {
