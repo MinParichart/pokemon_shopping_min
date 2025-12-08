@@ -37,7 +37,9 @@
             </div>
           </div>
           <div>
-            <label class="block text-sm mb-1 font-medium text-slate-700">หมวดหมู่</label>
+            <label class="block text-sm mb-1 font-medium text-slate-700">หมวดหมู่
+              <span class="text-red-700">*</span>
+            </label>
             <input v-model="form.category" required
               class="w-full border border-slate-300 rounded-lg px-4 py-2 text-base focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition" />
           </div>

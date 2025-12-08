@@ -42,12 +42,13 @@
             <td class="px-6 py-4 text-slate-700">{{ p.category }}</td>
             <td class="px-6 py-4 text-center whitespace-nowrap">
 
-              <button @click="openEditModal(p)" class="text-xs text-emerald-600 hover:text-emerald-700 mr-4 transition"
-                title="แก้ไข">
+              <button @click="openEditModal(p)"
+                class="text-xs text-emerald-600 hover:text-emerald-700 mr-4 transition cursor-pointer" title="แก้ไข">
                 <span class="material-symbols-outlined"> edit </span>
               </button>
 
-              <button class="text-xs text-red-500 hover:text-red-600 transition" @click="remove(p.id)" title="ลบ">
+              <button class="text-xs text-red-500 hover:text-red-600 transition cursor-pointer" @click="remove(p.id)"
+                title="ลบ">
                 <span class="material-symbols-outlined"> delete </span>
               </button>
             </td>
