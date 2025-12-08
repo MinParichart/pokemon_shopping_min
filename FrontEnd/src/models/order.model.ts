@@ -1,4 +1,6 @@
 import type { Product } from './product.model';
+import type { RegisterBody } from './auth.model';
+
 
 export type OrderStatus =
   | 'PENDING'
@@ -32,4 +34,5 @@ export interface Order {
   username?: string;
   fullName?: string;
   phone?: string;
+  user? : RegisterBody; 
 }

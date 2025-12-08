@@ -1,14 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap');
-
 @import 'tailwindcss';
 
+/* 👇 1. ประกาศ Theme ตรงนี้ เพื่อบอก Tailwind ให้ใช้ Prompt เป็น Default Font */
+@theme {
+  --font-sans: "Prompt", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* 👇 2. CSS ปกติ */
 body {
-  @apply bg-slate-100;
-  font-family:
-    'Prompt',
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    sans-serif;
+  /* ไม่ต้องกำหนด font-family ตรงนี้ซ้ำแล้ว เพราะเราแก้ที่ตัวแปร --font-sans ด้านบนแล้ว */
+  @apply bg-slate-100 text-slate-800; 
 }
