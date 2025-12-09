@@ -6,31 +6,25 @@
       <button v-for="tab in tabs" :key="tab.value"
         class="flex-1 text-center px-6 py-2 rounded-md text-sm font-extrabold transition-all duration-200" :class="tab.value === currentStatus
           ? 'bg-emerald-500 text-white shadow-sm'
-          : 'text-slate-500 hover:bg-slate-50'" @click="currentStatus = tab.value">
+          : 'text-slate-500 hover:bg-slate-50'" @click="changeTab(tab.value)">
         {{ tab.label }}
       </button>
     </div>
 
-    <div class="flex gap-3">
-      <button @click="bulkUpdateStatus('CONFIRM')"
-        class="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white text-sm font-medium rounded-lg hover:bg-emerald-600 transition shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
-        :disabled="selectedIds.length === 0">
-        <span class="material-symbols-outlined text-[18px]">check_circle</span>
-        ยืนยันการสั่งซื้อ
-        <span v-if="selectedIds.length > 0" class="ml-1 text-xs bg-white/20 px-1.5 rounded-full">
-          {{ selectedIds.length }}
-        </span>
-      </button>
+    <div class="h-10">
+      <div v-if="selectedIds.length > 0" class="flex gap-3 animate-fade-in">
+        <button @click="bulkUpdateStatus('CONFIRM')"
+          class="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white text-sm font-medium rounded-lg hover:bg-emerald-600 transition shadow-sm">
+          <span class="material-symbols-outlined text-[18px]">check_circle</span>
+          ยืนยัน {{ selectedIds.length }} รายการ
+        </button>
 
-      <button @click="bulkUpdateStatus('REJECT')"
-        class="flex items-center gap-2 px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 transition shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
-        :disabled="selectedIds.length === 0">
-        <span class="material-symbols-outlined text-[18px]">cancel</span>
-        ปฏิเสธการสั่งซื้อ
-        <span v-if="selectedIds.length > 0" class="ml-1 text-xs bg-white/20 px-1.5 rounded-full">
-          {{ selectedIds.length }}
-        </span>
-      </button>
+        <button @click="bulkUpdateStatus('REJECT')"
+          class="flex items-center gap-2 px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 transition shadow-sm">
+          <span class="material-symbols-outlined text-[18px]">cancel</span>
+          ปฏิเสธ {{ selectedIds.length }} รายการ
+        </button>
+      </div>
     </div>
 
     <div v-if="loading" class="flex justify-center py-20">
@@ -43,7 +37,8 @@
           class="bg-slate-50 border-b border-slate-200 text-sm text-slate-700 font-semibold uppercase tracking-wider">
           <tr>
             <th class="px-6 py-4 w-10">
-              <input type="checkbox" :checked="isAllSelected" @change="toggleSelectAll"
+              <input v-if="selectableOrders.length > 0" type="checkbox" :checked="isAllSelected"
+                @change="toggleSelectAll"
                 class="rounded border-slate-300 text-emerald-500 focus:ring-emerald-500 cursor-pointer" />
             </th>
             <th class="px-6 py-4">รหัสสั่งซื้อ</th>
@@ -58,7 +53,7 @@
           <template v-for="order in filteredOrders" :key="order.id">
             <tr class="hover:bg-slate-50/50 transition-colors group cursor-pointer" @click="toggleExpand(order.id)">
               <td class="px-6 py-4" @click.stop>
-                <input type="checkbox" v-model="selectedIds" :value="order.id"
+                <input v-if="isPending(order.status)" type="checkbox" v-model="selectedIds" :value="order.id"
                   class="rounded border-slate-300 text-emerald-500 focus:ring-emerald-500 cursor-pointer" />
               </td>
               <td class="px-6 py-4 font-medium text-slate-700">
@@ -129,8 +124,7 @@
                     </span>
                   </div>
 
-                  <div v-if="order.status === 'pending' || order.status === 'PENDING'"
-                    class="flex justify-end gap-3 pt-4">
+                  <div v-if="isPending(order.status)" class="flex justify-end gap-3 pt-4">
                     <button @click="updateStatus(order.id, 'CONFIRM')"
                       class="text-emerald-600 hover:underline text-sm font-medium">
                       ยืนยัน
@@ -159,24 +153,20 @@ import { computed, onMounted, ref } from 'vue';
 import type { Order } from '../models/order.model';
 import { ordersService } from '../services/orders.service';
 
-// --- State ---
 const orders = ref<Order[]>([]);
 const loading = ref(false);
 const currentStatus = ref<'ALL' | string>('ALL');
 const expandedOrders = ref(new Set<number>());
 const selectedIds = ref<number[]>([]);
 
-// --- Configuration ---
-// แก้ไข Value ให้ตรงกับ Backend (CONFIRM, REJECT ไม่มี -ED)
 const tabs = [
   { value: 'ALL', label: 'ทั้งหมด' },
   { value: 'PENDING', label: 'รอการยืนยันคำสั่งซื้อ' },
   { value: 'CONFIRM', label: 'ยืนยันคำสั่งซื้อ' },
   { value: 'REJECT', label: 'ปฏิเสธคำสั่งซื้อ' },
-  { value: 'CANCELLED', label: 'ยกเลิกคำสั่งซื้อ' },
+  { value: 'CANCEL', label: 'ยกเลิกคำสั่งซื้อ' },
 ];
 
-// --- Lifecycle ---
 onMounted(load);
 
 async function load() {
@@ -190,24 +180,40 @@ async function load() {
   }
 }
 
-// --- Computed Properties ---
+// Helper Function เช็คว่าเป็น Pending หรือไม่ (ใช้บ่อย)
+function isPending(status?: string): boolean {
+  return status?.toUpperCase() === 'PENDING';
+}
+
+function changeTab(status: string) {
+  currentStatus.value = status;
+  selectedIds.value = []; // ล้าง ID ที่เลือกไว้เมื่อเปลี่ยนหน้า
+}
+
+// 1. FilteredOrders: ตาม Tab (ALL คือทั้งหมด)
 const filteredOrders = computed(() => {
   if (currentStatus.value === 'ALL') return orders.value;
-  // ใช้ toUpperCase() เพื่อเทียบค่าให้ตรงกันไม่ว่า Backend จะส่งตัวเล็กหรือใหญ่มา
   return orders.value.filter((o) => o.status?.toUpperCase() === currentStatus.value);
 });
 
-const isAllSelected = computed(() => {
-  if (filteredOrders.value.length === 0) return false;
-  return filteredOrders.value.every(order => selectedIds.value.includes(order.id));
+// 2. SelectableOrders: กรองเฉพาะตัวที่เป็น Pending ในลิสต์ปัจจุบัน
+// ใช้สำหรับ Logic การเลือกทั้งหมด ว่าจะเลือกเฉพาะตัวที่เลือกได้เท่านั้น
+const selectableOrders = computed(() => {
+  return filteredOrders.value.filter(order => isPending(order.status));
 });
 
-// --- Methods: UI Interaction ---
+// 3. isAllSelected: เช็คจาก selectableOrders แทน filteredOrders ทั้งหมด
+const isAllSelected = computed(() => {
+  if (selectableOrders.value.length === 0) return false;
+  return selectableOrders.value.every(order => selectedIds.value.includes(order.id));
+});
+
+// 4. toggleSelectAll: เลือก/ไม่เลือก เฉพาะรายการที่เป็น Pending
 function toggleSelectAll() {
   if (isAllSelected.value) {
     selectedIds.value = [];
   } else {
-    selectedIds.value = filteredOrders.value.map(order => order.id);
+    selectedIds.value = selectableOrders.value.map(order => order.id);
   }
 }
 
@@ -219,7 +225,7 @@ function toggleExpand(id: number) {
   }
 }
 
-// --- Methods: Formatters ---
+// Helpers
 function calcTotal(order: Order): number {
   if (order.totalAmount) return order.totalAmount;
   return order.orderDetails.reduce((sum, d) => {
@@ -238,10 +244,10 @@ function formatCurrency(val: number): string {
 
 function getStatusColor(status: string): string {
   switch (status?.toUpperCase()) {
-    case 'PENDING': return 'text-yellow-500';
+    case 'PENDING': return 'text-yellow-600';
     case 'CONFIRM': return 'text-emerald-600';
     case 'REJECT': return 'text-red-500';
-    case 'CANCELLED': return 'text-slate-400';
+    case 'CANCEL': return 'text-red-800';
     default: return 'text-slate-600';
   }
 }
@@ -251,21 +257,17 @@ function getStatusLabel(status: string): string {
     'PENDING': 'รอการยืนยันคำสั่งซื้อ',
     'CONFIRM': 'ยืนยันคำสั่งซื้อ',
     'REJECT': 'ปฏิเสธคำสั่งซื้อ',
-    'CANCELLED': 'ยกเลิกคำสั่งซื้อ',
+    'CANCEL': 'ยกเลิกคำสั่งซื้อ',
   };
   return map[status?.toUpperCase()] || status;
 }
 
-// --- Methods: API Actions ---
-
-// อัปเดตรายการเดียว
+// Actions
 async function updateStatus(id: number, status: string) {
-  // status input: 'CONFIRM' หรือ 'REJECT'
   const action = status === 'CONFIRM' ? 'ยืนยัน' : 'ปฏิเสธ';
   if (!confirm(`ยืนยันการ${action}คำสั่งซื้อนี้?`)) return;
 
   try {
-    // ส่งค่าตัวพิมพ์เล็กไปหา Backend ('confirm' หรือ 'reject')
     await ordersService.updateOrder(id, { status: status.toLowerCase() });
     await load();
   } catch (error) {
@@ -274,7 +276,6 @@ async function updateStatus(id: number, status: string) {
   }
 }
 
-// อัปเดตหลายรายการ (Bulk)
 async function bulkUpdateStatus(status: string) {
   if (selectedIds.value.length === 0) {
     alert('กรุณาเลือกรายการคำสั่งซื้อก่อน');
@@ -288,13 +289,12 @@ async function bulkUpdateStatus(status: string) {
 
   loading.value = true;
   try {
-    // วนลูปส่งค่าตัวพิมพ์เล็กไปหา Backend
     await Promise.all(
       selectedIds.value.map(id => ordersService.updateOrder(id, { status: status.toLowerCase() }))
     );
 
     alert(`ดำเนินการ${action}เรียบร้อยแล้ว`);
-    selectedIds.value = []; // เคลียร์รายการที่เลือก
+    selectedIds.value = [];
     await load();
   } catch (error) {
     console.error(error);
