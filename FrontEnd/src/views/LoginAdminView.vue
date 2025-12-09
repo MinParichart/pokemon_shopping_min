@@ -1,69 +1,46 @@
 <template>
   <div>
-    <h1 class="text-xl font-semibold mb-4 text-center">เข้าสู่ระบบผู้ดูแล</h1>
-
+    <h1 class="text-xl font-semibold mb-4 text-center">เข้าสู่ระบบผู้ดูแล (Admin)</h1>
     <form class="space-y-4" @submit.prevent="onSubmit">
-      <div>
-        <label class="block text-sm mb-1">Username</label>
-        <input
-          v-model="username"
-          type="text"
-          required
-          class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
-        />
-      </div>
+      <BaseInput v-model="username" label="Username" required />
 
-      <div>
-        <label class="block text-sm mb-1">Password</label>
-
-        <!-- กล่อง input + รูปตา -->
-        <div class="relative">
-          <input
-            v-model="password"
-            :type="showPassword ? 'text' : 'password'"
-            required
-            class="w-full border border-gray-300 rounded-lg px-3 pr-10 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
-          />
-
-          <!-- ปุ่มรูปตา -->
-          <button
-            type="button"
-            class="absolute inset-y-0 right-0 px-3 flex items-center text-slate-400"
-            @click="showPassword = !showPassword"
-          >
-            <span class="material-symbols-outlined text-xl leading-none">
-              {{ showPassword ? 'visibility' : 'visibility_off' }}
-            </span>
+      <BaseInput v-model="password" :type="showPassword ? 'text' : 'password'" label="Password" required>
+        <template #rightIcon>
+          <button type="button" @click="showPassword = !showPassword" class="text-slate-400">
+            <span class="material-symbols-outlined">{{ showPassword ? 'visibility' : 'visibility_off' }}</span>
           </button>
-        </div>
-      </div>
+        </template>
+      </BaseInput>
 
-      <button
-        type="submit"
-        :disabled="loading"
-        class="w-full bg-emerald-500 text-white py-2 rounded-lg mt-2"
-      >
-        {{ loading ? 'กำลังเข้าสู่ระบบ...' : 'เข้าสู่ระบบผู้ดูแล' }}
-      </button>
+      <div class="space-y-2 mt-2">
+        <BaseButton type="submit" :loading="loading" block>
+          เข้าสู่ระบบ
+        </BaseButton>
+      </div>
     </form>
 
-    <p v-if="error" class="mt-3 text-xs text-red-500 text-center">
-      {{ error }}
-    </p>
+    <p v-if="error" class="mt-3 text-xs text-red-500 text-center">{{ error }}</p>
+
+    <div class="mt-4 text-center">
+      <RouterLink to="/login" class="text-xs text-slate-400 underline">
+        กลับไปหน้า Login ปกติ
+      </RouterLink>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import BaseButton from '../components/common/BaseButton.vue';
+import BaseInput from '../components/common/BaseInput.vue';
 import { useAuth } from '../composables/useAuth';
 
+// ฟังก์ชันการทำงานยังคงเดิม (Admin Logic)
 const { loginAdmin } = useAuth();
 const username = ref('');
 const password = ref('');
 const loading = ref(false);
 const error = ref('');
-
-// state สำหรับเปิด/ปิด password
 const showPassword = ref(false);
 
 async function onSubmit() {
@@ -72,7 +49,7 @@ async function onSubmit() {
   try {
     await loginAdmin(username.value, password.value);
   } catch (_e) {
-    error.value = 'เข้าสู่ระบบไม่สำเร็จ';
+    error.value = 'เข้าสู่ระบบไม่สำเร็จ ข้อมูลไม่ถูกต้อง';
   } finally {
     loading.value = false;
   }

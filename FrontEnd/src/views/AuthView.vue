@@ -1,75 +1,36 @@
 <template>
-  <div>
-    <h1 class="text-xl font-semibold mb-4 text-center">ลงทะเบียน</h1>
+  <div class="min-h-screen flex items-center justify-center bg-slate-50 p-4">
+    <div class="w-full max-w-md bg-white border border-slate-200 rounded-xl p-8 shadow-lg">
+      <h1 class="text-xl font-semibold mb-6 text-center text-slate-800">ลงทะเบียนสมาชิกใหม่</h1>
 
-    <form class="space-y-3" @submit.prevent="onSubmit">
-      <div>
-        <label class="block text-sm mb-1">Username</label>
-        <input
-          v-model="form.username"
-          required
-          class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
-        />
-      </div>
-      <div>
-        <label class="block text-sm mb-1">ชื่อ - นามสกุล</label>
-        <input
-          v-model="form.fullName"
-          required
-          class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
-        />
-      </div>
-      <div>
-        <label class="block text-sm mb-1">เบอร์โทรศัพท์</label>
-        <input
-          v-model="form.phone"
-          required
-          class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
-        />
-      </div>
-      <div class="grid grid-cols-2 gap-3">
-        <div>
-          <label class="block text-sm mb-1">Password</label>
-          <input
-            v-model="form.password"
-            type="password"
-            required
-            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
-          />
+      <form class="space-y-4" @submit.prevent="onSubmit">
+        <BaseInput v-model="form.username" label="Username" required />
+        <BaseInput v-model="form.fullName" label="ชื่อ - นามสกุล" required />
+        <BaseInput v-model="form.phone" label="เบอร์โทรศัพท์" required />
+        
+        <div class="grid grid-cols-2 gap-3">
+          <BaseInput v-model="form.password" type="password" label="Password" required />
+          <BaseInput v-model="form.confirmPassword" type="password" label="ยืนยัน Password" required />
         </div>
-        <div>
-          <label class="block text-sm mb-1">ยืนยัน Password</label>
-          <input
-            v-model="form.confirmPassword"
-            type="password"
-            required
-            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
-          />
+
+        <div class="pt-2">
+          <BaseButton type="submit" variant="primary" block :loading="loading">
+            ลงทะเบียน
+          </BaseButton>
         </div>
-      </div>
 
-      <button
-        type="submit"
-        class="w-full bg-emerald-500 text-white py-2 rounded-lg mt-2"
-        :disabled="loading"
-      >
-        {{ loading ? 'กำลังลงทะเบียน...' : 'ลงทะเบียน' }}
-      </button>
+        <div class="text-center mt-4">
+          <RouterLink to="/login" class="text-xs text-slate-500 hover:text-emerald-600 hover:underline">
+            มีบัญชีอยู่แล้ว? เข้าสู่ระบบ
+          </RouterLink>
+        </div>
+      </form>
 
-      <RouterLink
-        to="/login"
-        class="block text-center text-xs text-slate-500 mt-3"
-      >
-        มีบัญชีอยู่แล้ว? เข้าสู่ระบบ
-      </RouterLink>
-    </form>
-
-    <p v-if="error" class="mt-3 text-xs text-red-500 text-center">
-      {{ error }}
-    </p>
-    <p v-if="success" class="mt-3 text-xs text-emerald-600 text-center">
-      ลงทะเบียนสำเร็จ กรุณาเข้าสู่ระบบ
-    </p>
+      <p v-if="error" class="mt-4 text-xs text-red-500 text-center bg-red-50 p-2 rounded border border-red-100">{{ error }}</p>
+      <p v-if="success" class="mt-4 text-xs text-emerald-600 text-center bg-emerald-50 p-2 rounded border border-emerald-100">
+        ลงทะเบียนสำเร็จ กรุณาเข้าสู่ระบบ
+      </p>
+    </div>
   </div>
 </template>
 
@@ -77,14 +38,13 @@
 import { reactive, ref } from 'vue';
 import type { RegisterBody } from '../models/auth.model';
 import { authService } from '../services/auth.service';
+// ✅ Import Components
+import BaseInput from '../components/common/BaseInput.vue';
+import BaseButton from '../components/common/BaseButton.vue';
 
 const form = reactive<RegisterBody>({
-  username: '',
-  fullName: '',
-  phone: '',
-  password: '',
-  confirmPassword: '',
-  role: 'user',
+  username: '', fullName: '', phone: '',
+  password: '', confirmPassword: '', role: 'user',
 });
 
 const loading = ref(false);
@@ -92,21 +52,15 @@ const error = ref('');
 const success = ref(false);
 
 async function onSubmit() {
-  error.value = '';
-  success.value = false;
+  error.value = ''; success.value = false;
   if (form.password !== form.confirmPassword) {
-    error.value = 'Password และ ยืนยัน Password ไม่ตรงกัน';
-    return;
+    error.value = 'Password และ ยืนยัน Password ไม่ตรงกัน'; return;
   }
-
   loading.value = true;
   try {
     await authService.register(form);
     success.value = true;
-  } catch (_e) {
-    error.value = 'ลงทะเบียนไม่สำเร็จ';
-  } finally {
-    loading.value = false;
-  }
+  } catch (_e) { error.value = 'ลงทะเบียนไม่สำเร็จ (ชื่อผู้ใช้อาจซ้ำ)'; } 
+  finally { loading.value = false; }
 }
 </script>

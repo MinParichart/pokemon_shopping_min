@@ -39,7 +39,7 @@
 
 <script setup lang="ts">
 // type ของสินค้า ที่ import มาจาก model ส่วนกลาง
-import type { Product } from '../models/product.model';
+import type { Product } from '../../models/product.model';
 
 // รับ prop product เข้ามา (ข้อมูลของสินค้าตัวนี้)
 const props = defineProps<{
