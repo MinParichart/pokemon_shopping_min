@@ -1,10 +1,7 @@
 <template>
-  <button
-    :type="type"
-    :disabled="disabled || loading"
+  <button :type="type" :disabled="disabled || loading"
     class="inline-flex items-center justify-center gap-2 rounded-lg text-sm font-medium transition-colors focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
-    :class="classes"
-  >
+    :class="classes">
     <div v-if="loading" class="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
     <span v-else class="flex items-center gap-2">
       <slot name="icon"></slot>
@@ -26,7 +23,7 @@ const props = defineProps({
 
 const classes = computed(() => {
   let base = props.block ? 'w-full py-2' : 'px-4 py-2';
-  
+
   switch (props.variant) {
     case 'primary': // ปุ่มสีเขียวหลัก
       return `${base} bg-emerald-500 text-white hover:bg-emerald-600 shadow-sm`;
