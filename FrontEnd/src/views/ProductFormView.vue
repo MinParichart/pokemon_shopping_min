@@ -1,5 +1,5 @@
 <template>
-  <BaseModel :title="isEdit ? 'แก้ไขสินค้า' : 'เพิ่มสินค้าใหม่'" @close="$emit('close')">
+  <BaseModal :title="isEdit ? 'แก้ไขสินค้า' : 'เพิ่มสินค้าใหม่'" @close="$emit('close')">
     <form class="space-y-4" @submit.prevent="onSubmit">
       <BaseInput v-model="form.name" label="ชื่อสินค้า" required />
       <BaseInput v-model="form.description" type="textarea" label="คำอธิบาย" />
@@ -17,7 +17,7 @@
         <BaseButton type="submit" variant="primary">บันทึก</BaseButton>
       </div>
     </form>
-  </BaseModel>
+  </BaseModal>
 </template>
 
 <script setup lang="ts">

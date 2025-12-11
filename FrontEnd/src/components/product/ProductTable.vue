@@ -22,10 +22,10 @@
           <td class="px-6 py-4 text-slate-700">{{ p.category }}</td>
           <td class="px-6 py-4 text-center whitespace-nowrap">
             <BaseButton variant="text-primary" @click="$emit('edit', p)" title="แก้ไข">
-              <span class="material-symbols-outlined">edit</span>
+              <span class="material-symbols-outlined cursor-pointer">edit</span>
             </BaseButton>
             <BaseButton variant="text-danger" @click="$emit('remove', p.id)" title="ลบ">
-              <span class="material-symbols-outlined">delete</span>
+              <span class="material-symbols-outlined cursor-pointer">delete</span>
             </BaseButton>
           </td>
         </tr>
@@ -36,8 +36,8 @@
 </template>
 
 <script setup lang="ts">
-import BaseButton from '../common/BaseButton.vue';
 import type { Product } from '../../models/product.model';
+import BaseButton from '../common/BaseButton.vue';
 
 defineProps<{ products: Product[] }>();
 defineEmits(['edit', 'remove']);

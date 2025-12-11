@@ -22,12 +22,12 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
-import type { Product } from '../models/product.model';
-import { productsService } from '../services/products.service';
-import ProductTable from '../components/product/ProductTable.vue';
-import ProductFormView from './ProductFormView.vue';
 import BaseButton from '../components/common/BaseButton.vue';
 import BaseInput from '../components/common/BaseInput.vue';
+import ProductTable from '../components/product/ProductTable.vue';
+import type { Product } from '../models/product.model';
+import { productsService } from '../services/products.service';
+import ProductFormView from './ProductFormView.vue';
 
 const products = ref<Product[]>([]);
 const keyword = ref('');
