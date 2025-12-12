@@ -4,7 +4,7 @@
       <div class="px-4 py-4 border-b flex items-center gap-2">
         <div
           class="w-28 h-9 bg-slate-800 text-white flex items-center justify-center rounded-md text-xs font-semibold tracking-widest">
-          WUNCA
+          POKEMON
         </div>
         <span class="font-semibold text-sm text-slate-700">ADMIN</span>
       </div>
