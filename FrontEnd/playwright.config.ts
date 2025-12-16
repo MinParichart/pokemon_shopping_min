@@ -27,12 +27,13 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
-    // baseURL: 'http://localhost:5173',
+    baseURL: 'http://localhost:5173',
 
-    // headless: false, // ตั้งเป็น false เพื่อให้เปิด Browser ขึ้นมาให้เราดู
-    // launchOptions: {
-    //   slowMo: 1000, // หน่วงเวลา 1000 มิลลิวินาที (1 วินาที) ต่อการกระทำ
-    // },
+    headless: false, // ตั้งเป็น false เพื่อให้เปิด Browser ขึ้นมาให้เราดู
+    launchOptions: {
+      // slowMo: 500, // หน่วงเวลา 500 มิลลิวินาที (0.5 วินาที) ต่อการกระทำ
+      slowMo: 1000, // หน่วงเวลา 200 มิลลิวินาที (0.2 วินาที) ต่อการกระทำ
+    },
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -45,15 +46,15 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
 
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
+    // {
+    //   name: 'firefox',
+    //   use: { ...devices['Desktop Firefox'] },
+    // },
 
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
+    // {
+    //   name: 'webkit',
+    //   use: { ...devices['Desktop Safari'] },
+    // },
 
     /* Test against mobile viewports. */
     // {
