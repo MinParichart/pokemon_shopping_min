@@ -1,10 +1,12 @@
 import { expect, test } from '@playwright/test';
 
 test.describe('Admin single reject e2e (impl)', () => {
+  // -----------------------------------------------------------------------
+  // ⚠️ TC-ORDER-REJECT-01-impl: Admin can reject a single pending order
+  // -----------------------------------------------------------------------
   test('TC-ORDER-REJECT-01-impl: admin can reject a single pending order', async ({ page }) => {
-    let orders = [
-      { id: 301, orderCode: 'ORD301', status: 'PENDING', orderDetails: [{ product: { name: 'ekans' }, quantity: 1 }], totalAmount: 10 }
-    ];
+    // 1. 📝 Arrange: prepare orders list and adminPage with routes
+    let orders = [ { id: 301, orderCode: 'ORD301', status: 'PENDING', orderDetails: [{ product: { name: 'ekans' }, quantity: 1 }], totalAmount: 10 } ];
 
     const adminPage = await page.context().newPage();
     await adminPage.addInitScript(() => { localStorage.setItem('pokemon_token', 'admin-token'); localStorage.setItem('pokemon_admin_login', '1'); });
@@ -29,10 +31,10 @@ test.describe('Admin single reject e2e (impl)', () => {
       }
     });
 
+    // 2. 🎬 Act: visit admin orders, expand first row, and click reject
     await adminPage.goto('/admin/orders');
     await expect(adminPage.getByRole('heading', { name: 'จัดการการสั่งซื้อ' })).toBeVisible();
 
-    // Click first row to expand and click reject (expand renders a sibling row with buttons)
     const row = adminPage.locator('tbody tr').first();
     await row.click();
     adminPage.on('dialog', async d => { await d.accept(); });
@@ -42,6 +44,7 @@ test.describe('Admin single reject e2e (impl)', () => {
     await expect(expanded.getByRole('button', { name: 'ปฏิเสธ' })).toBeVisible({ timeout: 10000 });
     await expanded.getByRole('button', { name: 'ปฏิเสธ' }).click();
 
+    // 3. 🔍 Assert: first row shows rejected status
     await expect(adminPage.locator('tbody tr').first()).toContainText('ปฏิเสธคำสั่งซื้อ', { timeout: 5000 });
   });
 });

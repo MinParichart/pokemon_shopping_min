@@ -34,7 +34,7 @@ export default defineConfig({
     headless: false, // ตั้งเป็น false เพื่อให้เปิด Browser ขึ้นมาให้เราดู
     launchOptions: {
       // slowMo: 500, // หน่วงเวลา 500 มิลลิวินาที (0.5 วินาที) ต่อการกระทำ
-      slowMo: 200, // หน่วงเวลา 200 มิลลิวินาที (0.2 วินาที) ต่อการกระทำ
+      slowMo: 1000, // หน่วงเวลา 200 มิลลิวินาที (0.2 วินาที) ต่อการกระทำ
     },
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
