@@ -1,0 +1,39 @@
+import { expect, test } from '@playwright/test';
+
+test.describe('Admin edit product e2e (impl)', () => {
+  test('TC-ADMIN-PROD-EDIT-01-impl: admin can edit an existing product', async ({ page }) => {
+    // Admin login
+    await page.goto('/admin/login');
+    await page.getByRole('textbox').first().fill('admin');
+    await page.locator('input[type="password"]').fill('1234');
+    await page.getByRole('button', { name: 'เข้าสู่ระบบ' }).click();
+    await expect(page).toHaveURL(/.*\/admin\/orders/);
+
+    // Create a product to edit
+    await page.goto('/admin/products');
+    await page.getByRole('button', { name: 'เพิ่มสินค้าใหม่' }).click();
+    const originalName = `edit-me-${Date.now()}`;
+    await page.locator('label:has-text("ชื่อสินค้า") + div input').fill(originalName);
+    await page.locator('label:has-text("คำอธิบาย") + div textarea').fill('to be edited');
+    await page.locator('label:has-text("ราคา (฿)") + div input').fill('10');
+    await page.locator('label:has-text("จำนวนในสต็อก") + div input').fill('5');
+    await page.locator('label:has-text("หมวดหมู่") + div input').fill('test');
+    await page.locator('label:has-text("URL รูปภาพ") + div input').fill('https://example.com/edit.png');
+    await page.getByRole('button', { name: 'บันทึก' }).click();
+
+    // Find the created product row and click edit
+    const row = page.locator('tr').filter({ hasText: originalName }).first();
+    await expect(row).toBeVisible();
+    await row.getByTitle('แก้ไข').click();
+
+    // Update name and price
+    const newName = `${originalName}-UPDATED`;
+    await page.locator('label:has-text("ชื่อสินค้า") + div input').fill(newName);
+    await page.locator('label:has-text("ราคา (฿)") + div input').fill('20');
+    await page.getByRole('button', { name: 'บันทึก' }).click();
+
+    // Assert the updated product appears
+    await expect(page.locator('table')).toContainText(newName);
+    await expect(page.locator('table')).toContainText('฿20');
+  });
+});

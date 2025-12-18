@@ -1,0 +1,66 @@
+import { expect, test } from '@playwright/test';
+
+test.describe('Stock limit e2e (impl)', () => {
+  test('TC-PROD-05-impl: prevent adding more than available stock', async ({ page }) => {
+    // Mock admin login and products endpoints
+    await page.route('**/api/admin/login', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ token: 'admin-token' }) });
+    });
+
+    let createdProduct: any = null;
+    await page.route('**/api/products', async (route) => {
+      const method = route.request().method();
+      if (method === 'POST') {
+        const body = await route.request().postDataJSON();
+        createdProduct = { id: Date.now(), ...body };
+        await route.fulfill({ status: 201, contentType: 'application/json', body: JSON.stringify(createdProduct) });
+      } else {
+        await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(createdProduct ? [createdProduct] : []) });
+      }
+    });
+
+    // Admin: create a product with low stock
+    await page.goto('/admin/login');
+    await page.getByRole('textbox').first().fill('admin');
+    await page.locator('input[type="password"]').fill('1234');
+    await page.getByRole('button', { name: 'เข้าสู่ระบบ' }).click();
+    await expect(page).toHaveURL(/.*\/admin\/orders/);
+
+    await page.goto('/admin/products');
+    await page.getByRole('button', { name: 'เพิ่มสินค้าใหม่' }).click();
+
+    const productName = `stock-test-${Date.now()}`;
+    await page.locator('label:has-text("ชื่อสินค้า") + div input').fill(productName);
+    await page.locator('label:has-text("คำอธิบาย") + div textarea').fill('stock limit test');
+    await page.locator('label:has-text("ราคา (฿)") + div input').fill('9');
+    await page.locator('label:has-text("จำนวนในสต็อก") + div input').fill('2');
+    await page.locator('label:has-text("หมวดหมู่") + div input').fill('test');
+    await page.locator('label:has-text("URL รูปภาพ") + div input').fill('https://example.com/img.png');
+    await page.getByRole('button', { name: 'บันทึก' }).click();
+
+    // Wait for created product to appear in admin products list, then logout admin
+    await expect(page.getByText(productName)).toBeVisible({ timeout: 10000 });
+    // Click admin logout directly (Admin layout exposes 'ออกจากระบบ')
+    await expect(page.getByRole('button', { name: 'ออกจากระบบ' })).toBeVisible({ timeout: 10000 });
+    await page.getByRole('button', { name: 'ออกจากระบบ' }).click();
+
+    // User: login and attempt to add more than stock
+    await page.goto('/login');
+    await page.getByRole('textbox').first().fill('minnie');
+    await page.locator('input[type="password"]').fill('string');
+    await page.getByRole('button', { name: 'เข้าสู่ระบบ' }).click();
+    await expect(page).toHaveURL(/.*\/products/);
+
+    // Search and add product multiple times
+    await page.getByRole('textbox', { name: 'ค้นหาสินค้าทั้งหมด' }).fill(productName);
+    await expect(page.getByText(productName)).toBeVisible();
+    await expect(page.getByRole('button', { name: 'add_shopping_cart' }).first()).toBeVisible();
+    await page.getByRole('button', { name: 'add_shopping_cart' }).first().click();
+    await page.getByRole('button', { name: 'add_shopping_cart' }).first().click();
+    // third attempt should be blocked or show toast
+    await page.getByRole('button', { name: 'add_shopping_cart' }).first().click();
+
+    // Assert some toast or message about stock limit appears (narrow to paragraph elements)
+    await expect(page.locator('p').filter({ hasText: /หมด|ครบจำนวน|หมดหรือครบจำนวน/ }).first()).toBeVisible({ timeout: 5000 });
+  });
+});

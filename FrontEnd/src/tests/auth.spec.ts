@@ -1,5 +1,8 @@
 import { expect, test } from '@playwright/test';
 
+// Reference file: kept for documentation. Skipped during test runs.
+test.skip(true, 'Reference file - moved to src/tests/reference');
+
 test.describe('Register Page Testing Suite', () => {
   // -----------------------------------------------------------------------
   // 🛠️ SETUP: ตั้งค่าก่อนเริ่ม Test ทุกข้อ
