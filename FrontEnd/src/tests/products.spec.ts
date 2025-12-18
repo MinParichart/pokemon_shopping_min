@@ -1,5 +1,4 @@
 import { expect, test } from '@playwright/test';
-import { LoginResponse } from '../models/auth.model';
 
 test.describe('User Products List Page (Real Data)', () => {
 
