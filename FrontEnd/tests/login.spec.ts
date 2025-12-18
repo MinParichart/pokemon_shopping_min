@@ -1,99 +1,118 @@
 import { expect, test } from '@playwright/test';
 
-test.describe('Login page', () => {
-  test('user can login with valid credentials', async ({ page }) => {
-    // 1. ไปหน้า Login
+test.describe('User Login Page (Real API)', () => {
+
+  // -----------------------------------------------------------------------
+  // 🛠️ SETUP: ทำก่อนเริ่ม Test ทุกข้อ
+  // -----------------------------------------------------------------------
+  test.beforeEach(async ({ page }) => {
+    // ไปที่หน้า User Login ทุกครั้ง
     await page.goto('http://localhost:5173/login');
+  });
 
-    // 2. กรอกข้อมูล
-    await page.getByRole('textbox').first().fill('minnie');
-    await page.locator('input[type="password"]').fill('string');
+  // -----------------------------------------------------------------------
+  // ✅ TC-USER-01: ผู้ใช้ทั่วไปล็อกอินสำเร็จ (Happy Path)
+  // -----------------------------------------------------------------------
+  test('TC-USER-01: User can login with valid credentials', async ({ page }) => {
+    // 1. 📝 Arrange: เตรียมตัวแปร
+    const usernameInput = page.getByRole('textbox').first();
+    const passwordInput = page.locator('input[type="password"]');
+    const loginBtn = page.getByRole('button', { name: 'เข้าสู่ระบบ' });
 
-    // 3. กดปุ่ม Login
-    await page.getByRole('button', { name: 'เข้าสู่ระบบ' }).click();
+    // 2. 🎬 Act: กรอกข้อมูลจริง (ที่มีใน Database)
+    await usernameInput.fill('minnie');
+    await passwordInput.fill('string');
+    await loginBtn.click();
 
-    // 4. 🔥 จุดที่แก้: ตรวจสอบ URL ว่าเปลี่ยนไปหน้า products แล้วจริงๆ
-    // ใช้ RegExp (/.../) เพื่อให้ยืดหยุ่น หรือใส่ URL เต็มก็ได้
+    // 3. 🔍 Assert: ตรวจสอบผลลัพธ์
+    // เช็คว่า URL เปลี่ยนไปหน้า products
     await expect(page).toHaveURL(/.*\/products/);
 
-    // 5. (แนะนำเพิ่ม) เช็คว่าเจอ Element ในหน้านั้นจริงๆ เช่น หัวข้อสินค้า
-    // เพื่อความชัวร์ว่าหน้าเว็บโหลดเสร็จแล้ว
+    // เช็คว่าเจอหัวข้อสินค้า (เพื่อยืนยันว่าหน้าโหลดเสร็จจริง)
     await expect(page.locator('h1')).toContainText('สินค้าทั้งหมด');
   });
 
-  test('invalid credentials show error message', async ({ page }) => {
-    // 1. ไปหน้า Login
-    await page.goto('http://localhost:5173/login');
+  // -----------------------------------------------------------------------
+  // 🛑 TC-USER-02: ข้อมูลผิด (Invalid Credentials)
+  // -----------------------------------------------------------------------
+  test('TC-USER-02: Should show error message for invalid credentials', async ({ page }) => {
+    // 1. 📝 Arrange
+    const usernameInput = page.getByRole('textbox').first();
+    const passwordInput = page.locator('input[type="password"]');
+    const loginBtn = page.getByRole('button', { name: 'เข้าสู่ระบบ' });
 
-    // 2. กรอกข้อมูล
-    await page.getByRole('textbox').first().fill('who');
-    await page.locator('input[type="password"]').fill('wrong');
+    // 2. 🎬 Act: กรอกข้อมูลมั่วๆ
+    await usernameInput.fill('wronguser');
+    await passwordInput.fill('wronguser');
+    await loginBtn.click();
 
-    // 3. กดปุ่ม Login
+    // 3. 🔍 Assert: ต้องเจอ Error Message
+    await expect(page.locator('#app')).toContainText('เข้าสู่ระบบไม่สำเร็จ');
+  });
+
+  // -----------------------------------------------------------------------
+  // ⚠️ TC-USER-03: ไม่กรอก Username (Empty Username)
+  // -----------------------------------------------------------------------
+  test('TC-USER-03: Should show error when username is empty', async ({ page }) => {
+    const usernameInput = page.getByRole('textbox').first();
+    const passwordInput = page.locator('input[type="password"]');
+    const loginBtn = page.getByRole('button', { name: 'เข้าสู่ระบบ' });
+
+    // กรอกแต่รหัสผ่าน (เว้น username ว่าง)
+    await usernameInput.fill('');
+    await passwordInput.fill('usernameempty');
+    await loginBtn.click();
+
+    await expect(page.locator('#app')).toContainText('เข้าสู่ระบบไม่สำเร็จ');
+  });
+
+  // -----------------------------------------------------------------------
+  // ⚠️ TC-USER-04: ไม่กรอก Password (Empty Password)
+  // -----------------------------------------------------------------------
+  test('TC-USER-04: Should show error when password is empty', async ({ page }) => {
+    const usernameInput = page.getByRole('textbox').first();
+    const passwordInput = page.locator('input[type="password"]');
+    const loginBtn = page.getByRole('button', { name: 'เข้าสู่ระบบ' });
+
+    // กรอกแต่ username (เว้น password ว่าง)
+    await usernameInput.fill('passwordempty');
+    await passwordInput.fill('');
+    await loginBtn.click();
+
+    await expect(page.locator('#app')).toContainText('เข้าสู่ระบบไม่สำเร็จ');
+  });
+
+  // -----------------------------------------------------------------------
+  // ⚠️ TC-USER-05: ไม่กรอกอะไรเลย (Empty Both)
+  // -----------------------------------------------------------------------
+  test('TC-USER-05: Should show error when both fields are empty', async ({ page }) => {
+    // กดปุ่มเลยทันที
     await page.getByRole('button', { name: 'เข้าสู่ระบบ' }).click();
 
     await expect(page.locator('#app')).toContainText('เข้าสู่ระบบไม่สำเร็จ');
   });
 
-  test('not input username show error message', async ({ page }) => {
-    // 1. ไปหน้า Login
-    await page.goto('http://localhost:5173/login');
+  // -----------------------------------------------------------------------
+  // 🔗 TC-USER-06: ปุ่มสลับไปหน้า Admin (Navigation)
+  // -----------------------------------------------------------------------
+  test('TC-USER-06: Should navigate to Admin Login page', async ({ page }) => {
+    // กดลิงก์ไปหน้า Admin
+    // (ใช้ regex ช่วย match ชื่อ เผื่อข้อความยาวๆ)
+    await page.getByRole('link', { name: /เข้าสู่ระบบสำหรับผู้ดูแล/ }).click();
 
-    // 2. กรอกข้อมูล
-    await page.getByRole('textbox').first().fill('');
-    await page.locator('input[type="password"]').fill('wrong');
-
-    // 3. กดปุ่ม Login
-    await page.getByRole('button', { name: 'เข้าสู่ระบบ' }).click();
-
-    await expect(page.locator('#app')).toContainText('เข้าสู่ระบบไม่สำเร็จ');
-  });
-
-  test('not input password show error message', async ({ page }) => {
-    // 1. ไปหน้า Login
-    await page.goto('http://localhost:5173/login');
-
-    // 2. กรอกข้อมูล
-    await page.getByRole('textbox').first().fill('who');
-    await page.locator('input[type="password"]').fill('');
-
-    // 3. กดปุ่ม Login
-    await page.getByRole('button', { name: 'เข้าสู่ระบบ' }).click();
-
-    await expect(page.locator('#app')).toContainText('เข้าสู่ระบบไม่สำเร็จ');
-  });
-  test('not input username , password  and show error message', async ({
-    page,
-  }) => {
-    // 1. ไปหน้า Login
-    await page.goto('http://localhost:5173/login');
-
-    // 2. กรอกข้อมูล
-    await page.getByRole('textbox').first().fill('');
-    await page.locator('input[type="password"]').fill('');
-
-    // 3. กดปุ่ม Login
-    await page.getByRole('button', { name: 'เข้าสู่ระบบ' }).click();
-
-    await expect(page.locator('#app')).toContainText('เข้าสู่ระบบไม่สำเร็จ');
-  });
-
-  test('change to login for admin', async ({ page }) => {
-    // 1. ไปหน้า Login
-    await page.goto('http://localhost:5173/login');
-    // 2. กดลิงก์เปลี่ยนไปหน้า Admin
-    await page
-      .getByRole('link', { name: 'เข้าสู่ระบบสำหรับผู้ดูแล (' })
-      .click();
-    // 3. ✅ เช็คว่า URL เปลี่ยนเป็นหน้า Admin Login จริงไหม
+    // เช็ค URL
     await expect(page).toHaveURL('http://localhost:5173/admin/login');
   });
 
-    test('guest can click register button successfully', async ({ page }) => {
-    await page.goto('http://localhost:5173/login');
+  // -----------------------------------------------------------------------
+  // 🔗 TC-USER-07: ปุ่มไปหน้าสมัครสมาชิก (Navigation)
+  // -----------------------------------------------------------------------
+  test('TC-USER-07: Should navigate to Register page', async ({ page }) => {
+    // กดปุ่มลงทะเบียน
     await page.getByRole('link', { name: 'ลงทะเบียน' }).click();
-    // 3. ✅ เช็คว่า URL เปลี่ยนเป็นหน้า User Register จริงไหม
-    await expect(page).toHaveURL('http://localhost:5173/register');
 
+    // เช็ค URL
+    await expect(page).toHaveURL('http://localhost:5173/register');
   });
+
 });

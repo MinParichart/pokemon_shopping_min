@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "preview": "vite preview", 
+    "preview": "vite preview",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,vue,html,css,json,md}\""
   },
   "dependencies": {
@@ -23,6 +23,7 @@
     "vue-router": "^4.6.3"
   },
   "devDependencies": {
+    "@playwright/test": "^1.57.0",
     "@types/node": "^24.6.0",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue/tsconfig": "^0.8.1",
