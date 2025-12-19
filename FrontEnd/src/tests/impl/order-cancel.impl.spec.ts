@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test.describe('Orders e2e (impl)', () => {
   // -----------------------------------------------------------------------
-  // ⚠️ TC-PROD-06-impl: Place an order then cancel it
+  // ⚠️ TC-PROD-06-impl: สั่งซื้อสินค้าจากนั้น cancel order
   // -----------------------------------------------------------------------
   test('TC-PROD-06-impl: place an order then cancel it', async ({ page }) => {
     // 1. 📝 Arrange: mock auth/products/orders and keep mutable order state

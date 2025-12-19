@@ -34,7 +34,7 @@ export const useCartStore = defineStore('cart', {
 
       const currentQty = item?.quantity ?? 0;
 
-      // ❗ถ้าจำนวนในรถเข็น >= stock แล้ว ไม่ให้เพิ่ม
+      // ถ้าจำนวนในรถเข็น >= stock แล้ว ไม่ให้เพิ่ม
       if (currentQty >= product.stock) {
         return false;
       }
@@ -63,7 +63,7 @@ export const useCartStore = defineStore('cart', {
         return;
       }
 
-      // ❗ล็อกไม่ให้เกิน stock
+      // ล็อกไม่ให้เกิน stock
       const max = item.product.stock;
       item.quantity = q > max ? max : q;
     },

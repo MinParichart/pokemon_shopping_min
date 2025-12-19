@@ -24,13 +24,14 @@
               <th class="text-center px-4 py-2">ราคารวม</th>
               <th class="text-center px-4 py-2"></th>
               <th class="text-center px-4 py-2">
-                 <button class="text-slate-600 hover:underline disabled:text-slate-300" :disabled="cart.selectedItems.length === 0" @click="removeSelected">ลบที่เลือก</button>
+                <button class="text-slate-600 hover:underline disabled:text-slate-300"
+                  :disabled="cart.selectedItems.length === 0" @click="removeSelected">ลบที่เลือก</button>
               </th>
             </tr>
           </thead>
           <tbody>
-            <CartItemRow v-for="item in cart.items" :key="item.product.id" :item="item" 
-              @select="cart.toggleSelected" @changeQty="changeQty" @remove="cart.removeProduct" />
+            <CartItemRow v-for="item in cart.items" :key="item.product.id" :item="item" @select="cart.toggleSelected"
+              @changeQty="changeQty" @remove="cart.removeProduct" />
           </tbody>
         </table>
       </div>
@@ -46,7 +47,7 @@
       <p class="text-sm mb-3 text-center">โปรดกรอกที่อยู่จัดส่งสินค้า</p>
       <BaseInput v-model="shippingAddress" type="textarea" placeholder="ที่อยู่จัดส่ง..." />
       <p v-if="error" class="mt-2 text-xs text-red-500">{{ error }}</p>
-      
+
       <div class="flex justify-end gap-3 mt-4">
         <BaseButton variant="outline" @click="showAddress = false">ยกเลิก</BaseButton>
         <BaseButton :loading="loading" @click="confirmOrder">ยืนยัน</BaseButton>
@@ -92,6 +93,21 @@ function formatPrice(value: number) { return Number(value).toLocaleString('th-TH
 
 <style scoped>
 /* Checkbox style if needed locally for header */
-.cart-checkbox { width: 1.2rem; height: 1.2rem; border-radius: 0.4rem; cursor: pointer; border: 2px solid #10b981; appearance: none; }
-.cart-checkbox:checked { background-color: #10b981; border-color: #10b981; background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M4 8.5L6.5 11L12 5' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: center; background-size: 80% 80%; }
+.cart-checkbox {
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  border: 2px solid #10b981;
+  appearance: none;
+}
+
+.cart-checkbox:checked {
+  background-color: #10b981;
+  border-color: #10b981;
+  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M4 8.5L6.5 11L12 5' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 80% 80%;
+}
 </style>

@@ -44,7 +44,6 @@
 </template>
 
 <script setup lang="ts">
-import { RouterView } from 'vue-router';
 
 // ✅ แก้ชื่อตัวแปรจาก santa-pokemon เป็น santaImg (ห้ามมีขีดกลาง)
 import santaImg from '../assets/santa-pokemon.jpg';

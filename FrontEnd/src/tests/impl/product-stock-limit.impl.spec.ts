@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test.describe('Stock limit e2e (impl)', () => {
   // -----------------------------------------------------------------------
-  // ⚠️ TC-PROD-05-impl: Prevent adding more than available stock
+  // ⚠️ TC-PROD-05-impl: ตรวจสอบการจำกัดสต็อก
   // -----------------------------------------------------------------------
   test('TC-PROD-05-impl: prevent adding more than available stock', async ({ page }) => {
     // 1. 📝 Arrange: mock admin login and products endpoints and prepare product store

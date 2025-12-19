@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test.describe('Admin bulk confirm e2e (impl)', () => {
   // -----------------------------------------------------------------------
-  // ✅ TC-ORDER-BULK-CONFIRM-01-impl: Admin can bulk confirm pending orders
+  // ✅ TC-ORDER-BULK-CONFIRM-01-impl: Admin ยืนยันหลายคำสั่งพร้อมกัน 
   // -----------------------------------------------------------------------
   test('TC-ORDER-BULK-CONFIRM-01-impl: admin can bulk confirm pending orders', async ({ page }) => {
     // 1. 📝 Arrange: prepare orders and admin page

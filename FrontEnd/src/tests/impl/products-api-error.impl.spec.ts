@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test.describe('Products error handling (impl)', () => {
   // -----------------------------------------------------------------------
-  // ⚠️ TC-PROD-ERR-01-impl: Products page handles API 500 gracefully
+  // ⚠️ TC-PROD-ERR-01-impl: ทดสอบเส้นทาง error
   // -----------------------------------------------------------------------
   test('TC-PROD-ERR-01-impl: products page handles API 500 gracefully', async ({ page }) => {
     // 1. 📝 Arrange: mock products API to return 500 and set auth

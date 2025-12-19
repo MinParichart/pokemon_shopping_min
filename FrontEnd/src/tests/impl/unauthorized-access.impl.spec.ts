@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test.describe('Unauthorized access e2e (impl)', () => {
   // -----------------------------------------------------------------------
-  // ⚠️ TC-AUTH-UNAUTH-01-impl: Non-admin user redirected from admin routes
+  // ⚠️ TC-AUTH-UNAUTH-01-impl: ตรวจการเข้าถึง admin โดยไม่ใช่ admin
   // -----------------------------------------------------------------------
   test('TC-AUTH-UNAUTH-01-impl: non-admin user redirected from admin routes', async ({ page }) => {
     // 1. 📝 Arrange: set non-admin token

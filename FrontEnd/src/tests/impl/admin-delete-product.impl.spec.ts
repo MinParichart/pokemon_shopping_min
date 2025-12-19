@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test.describe('Admin delete product e2e (impl)', () => {
   // -----------------------------------------------------------------------
-  // ✅ TC-ADMIN-PROD-DELETE-01-impl: Admin can delete a product
+  // ✅ TC-ADMIN-PROD-DELETE-01-impl: Admin ลบสินค้า
   // -----------------------------------------------------------------------
   test('TC-ADMIN-PROD-DELETE-01-impl: admin can delete a product', async ({ page }) => {
     // 1. 📝 Arrange: prepare unique product name

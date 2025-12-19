@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test.describe('Order status transition e2e (impl)', () => {
   // -----------------------------------------------------------------------
-  // ✅ TC-ORDER-STATUS-01-impl: User places order; Admin confirms it
+  // ✅ TC-ORDER-STATUS-01-impl: User สั่งซื้อสินค้า; Admin ยืนยันคำสั่งซื้อ
   // -----------------------------------------------------------------------
   test('TC-ORDER-STATUS-01-impl: user places order; admin confirms it', async ({ page }) => {
     // 1. 📝 Arrange: Mock auth/products/orders and prepare a mutable order object

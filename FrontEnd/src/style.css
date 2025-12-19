@@ -3,11 +3,11 @@
 
 /* 👇 1. ประกาศ Theme ตรงนี้ เพื่อบอก Tailwind ให้ใช้ Prompt เป็น Default Font */
 @theme {
-  --font-sans: "Prompt", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Prompt', ui-sans-serif, system-ui, sans-serif;
 }
 
 /* 👇 2. CSS ปกติ */
 body {
   /* ไม่ต้องกำหนด font-family ตรงนี้ซ้ำแล้ว เพราะเราแก้ที่ตัวแปร --font-sans ด้านบนแล้ว */
-  @apply bg-slate-100 text-slate-800; 
+  @apply bg-slate-100 text-slate-800;
 }

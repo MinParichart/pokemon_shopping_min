@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test.describe('Admin single reject e2e (impl)', () => {
   // -----------------------------------------------------------------------
-  // ⚠️ TC-ORDER-REJECT-01-impl: Admin can reject a single pending order
+  // ⚠️ TC-ORDER-REJECT-01-impl: Admin ปฏิเสธออร์เดอร์ทีละรายการ 
   // -----------------------------------------------------------------------
   test('TC-ORDER-REJECT-01-impl: admin can reject a single pending order', async ({ page }) => {
     // 1. 📝 Arrange: prepare orders list and adminPage with routes

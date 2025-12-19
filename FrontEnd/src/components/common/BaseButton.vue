@@ -14,7 +14,10 @@
 import { computed } from 'vue';
 
 const props = defineProps({
-  type: { type: String as () => 'button' | 'submit' | 'reset', default: 'button' },
+  type: {
+    type: String as () => 'button' | 'submit' | 'reset',
+    default: 'button',
+  },
   variant: { type: String, default: 'primary' }, // primary, danger, outline, text-danger
   loading: Boolean,
   disabled: Boolean,

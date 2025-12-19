@@ -4,7 +4,8 @@
 
     <OrderTabs v-model="currentStatus" @update:model-value="onTabChange" />
 
-    <BulkActionBar :count="selectedIds.length" @confirm="bulkUpdateStatus('CONFIRM')" @reject="bulkUpdateStatus('REJECT')" />
+    <BulkActionBar :count="selectedIds.length" @confirm="bulkUpdateStatus('CONFIRM')"
+      @reject="bulkUpdateStatus('REJECT')" />
 
     <div v-if="loading" class="flex justify-center py-20">
       <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
@@ -12,10 +13,13 @@
 
     <div v-else class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
       <table class="w-full text-left border-collapse">
-        <thead class="bg-slate-50 border-b border-slate-200 text-sm text-slate-700 font-semibold uppercase tracking-wider">
+        <thead
+          class="bg-slate-50 border-b border-slate-200 text-sm text-slate-700 font-semibold uppercase tracking-wider">
           <tr>
             <th class="px-6 py-4 w-10">
-              <input v-if="selectableOrders.length > 0" type="checkbox" :checked="isAllSelected" @change="toggleSelectAll" class="rounded border-slate-300 text-emerald-500 focus:ring-emerald-500 cursor-pointer" />
+              <input v-if="selectableOrders.length > 0" type="checkbox" :checked="isAllSelected"
+                @change="toggleSelectAll"
+                class="rounded border-slate-300 text-emerald-500 focus:ring-emerald-500 cursor-pointer" />
             </th>
             <th class="px-6 py-4">รหัสสั่งซื้อ</th>
             <th class="px-6 py-4">ผู้สั่งซื้อ</th>
@@ -29,9 +33,11 @@
           <template v-for="order in filteredOrders" :key="order.id">
             <tr class="hover:bg-slate-50/50 transition-colors group cursor-pointer" @click="toggleExpand(order.id)">
               <td class="px-6 py-4" @click.stop>
-                <input v-if="isPending(order.status)" type="checkbox" v-model="selectedIds" :value="order.id" class="rounded border-slate-300 text-emerald-500 focus:ring-emerald-500 cursor-pointer" />
+                <input v-if="isPending(order.status)" type="checkbox" v-model="selectedIds" :value="order.id"
+                  class="rounded border-slate-300 text-emerald-500 focus:ring-emerald-500 cursor-pointer" />
               </td>
-              <td class="px-6 py-4 font-medium text-slate-700">{{ order.orderCode ?? String(order.id).padStart(6, '0') }}</td>
+              <td class="px-6 py-4 font-medium text-slate-700">{{ order.orderCode ?? String(order.id).padStart(6, '0')
+                }}</td>
               <td class="px-6 py-4">
                 <div class="flex flex-col text-sm">
                   <span class="font-bold text-emerald-600">{{ order.user?.username ?? '-' }}</span>
@@ -39,24 +45,31 @@
                 </div>
               </td>
               <td class="px-6 py-4 text-center text-sm text-slate-600">{{ order.orderDetails.length }} รายการ</td>
-              <td class="px-6 py-4 text-right font-semibold text-slate-500">{{ formatCurrency(order.totalAmount ?? calcTotal(order)) }}</td>
-              <td class="px-6 py-4 text-center"><StatusBadge :status="order.status" /></td>
+              <td class="px-6 py-4 text-right font-semibold text-slate-500">{{ formatCurrency(order.totalAmount ??
+                calcTotal(order)) }}</td>
+              <td class="px-6 py-4 text-center">
+                <StatusBadge :status="order.status" />
+              </td>
               <td class="px-6 py-4 text-center text-slate-400">
-                <span class="material-symbols-outlined transition-transform duration-300" :class="{ 'rotate-180': expandedOrders.has(order.id) }">keyboard_arrow_down</span>
+                <span class="material-symbols-outlined transition-transform duration-300"
+                  :class="{ 'rotate-180': expandedOrders.has(order.id) }">keyboard_arrow_down</span>
               </td>
             </tr>
             <tr v-if="expandedOrders.has(order.id)" class="bg-slate-50/50">
               <td colspan="7" class="py-4 border-t border-slate-100 shadow-inner">
                 <div class="space-y-3 mx-20">
-                  <div v-for="(detail, index) in order.orderDetails" :key="index" class="flex items-center justify-between py-2 border-b border-slate-200/60 last:border-0">
+                  <div v-for="(detail, index) in order.orderDetails" :key="index"
+                    class="flex items-center justify-between py-2 border-b border-slate-200/60 last:border-0">
                     <div class="flex items-center gap-4">
-                      <img :src="detail.product?.imageUrl" class="w-10 h-10 object-contain bg-white rounded border p-1" />
+                      <img :src="detail.product?.imageUrl"
+                        class="w-10 h-10 object-contain bg-white rounded border p-1" />
                       <div>
                         <span class="text-sm font-medium">{{ detail.product?.name }}</span>
                         <div class="text-xs text-slate-400">x {{ detail.quantity }}</div>
                       </div>
                     </div>
-                    <div class="text-sm font-medium text-slate-500">{{ formatCurrency((detail.price ?? 0) * detail.quantity) }}</div>
+                    <div class="text-sm font-medium text-slate-500">{{ formatCurrency((detail.price ?? 0) *
+                      detail.quantity) }}</div>
                   </div>
                   <div v-if="isPending(order.status)" class="flex justify-end gap-3 pt-4">
                     <BaseButton variant="text-primary" @click="updateStatus(order.id, 'CONFIRM')">ยืนยัน</BaseButton>
@@ -105,7 +118,7 @@ function toggleSelectAll() {
 function toggleExpand(id: number) {
   if (expandedOrders.value.has(id)) expandedOrders.value.delete(id); else expandedOrders.value.add(id);
 }
-function calcTotal(o: Order) { return o.orderDetails.reduce((sum, d) => sum + (d.price??0)*d.quantity, 0); }
+function calcTotal(o: Order) { return o.orderDetails.reduce((sum, d) => sum + (d.price ?? 0) * d.quantity, 0); }
 function countTotalItems(o: Order) { return o.orderDetails.reduce((sum, d) => sum + d.quantity, 0); }
 function formatCurrency(v: number) { return '฿' + v.toLocaleString(); }
 

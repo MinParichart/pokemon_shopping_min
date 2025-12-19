@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test.describe('Admin bulk actions e2e (impl)', () => {
   // -----------------------------------------------------------------------
-  // ⚠️ TC-ORDER-BULK-REJECT-01-impl: Admin can bulk reject pending orders
+  // ⚠️ TC-ORDER-BULK-REJECT-01-impl: Admin ปฏิเสธหลายคำสั่งพร้อมกัน
   // -----------------------------------------------------------------------
   test('TC-ORDER-BULK-REJECT-01-impl: admin can bulk reject pending orders', async ({ page }) => {
     // 1. 📝 Arrange: prepare orders state and adminPage with routes

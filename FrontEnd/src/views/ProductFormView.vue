@@ -3,7 +3,7 @@
     <form class="space-y-4" @submit.prevent="onSubmit">
       <BaseInput v-model="form.name" label="ชื่อสินค้า" required />
       <BaseInput v-model="form.description" type="textarea" label="คำอธิบาย" />
-      
+
       <div class="grid grid-cols-2 gap-4">
         <BaseInput v-model="form.price" type="number" label="ราคา (฿)" required />
         <BaseInput v-model="form.stock" type="number" label="จำนวนในสต็อก" required />

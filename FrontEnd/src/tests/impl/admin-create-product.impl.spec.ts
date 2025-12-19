@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test.describe('Admin products e2e (impl)', () => {
   // -----------------------------------------------------------------------
-  // ✅ TC-ADMIN-PROD-01-impl: Admin can create a new product
+  // ✅ TC-ADMIN-PROD-01-impl: Admin สร้างสินค้าใหม่
   // -----------------------------------------------------------------------
   test('TC-ADMIN-PROD-01-impl: admin can create a new product', async ({ page }) => {
     // 1. 📝 Arrange: mock admin login and products endpoints
@@ -41,5 +41,6 @@ test.describe('Admin products e2e (impl)', () => {
 
     // 3. 🔍 Assert: created product appears in the table
     await expect(page.locator('table')).toContainText('test-product-impl');
+
   });
 });

@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test.describe('Admin edit product e2e (impl)', () => {
   // -----------------------------------------------------------------------
-  // ✅ TC-ADMIN-PROD-EDIT-01-impl: Admin can edit an existing product
+  // ✅ TC-ADMIN-PROD-EDIT-01-impl: Admin แก้ไขสินค้าที่มีอยู่แล้ว
   // -----------------------------------------------------------------------
   test('TC-ADMIN-PROD-EDIT-01-impl: admin can edit an existing product', async ({ page }) => {
     // 1. 📝 Arrange: create unique product names for the test
