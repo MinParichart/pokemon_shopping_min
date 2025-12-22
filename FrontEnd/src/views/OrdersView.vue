@@ -37,7 +37,7 @@
                   class="rounded border-slate-300 text-emerald-500 focus:ring-emerald-500 cursor-pointer" />
               </td>
               <td class="px-6 py-4 font-medium text-slate-700">{{ order.orderCode ?? String(order.id).padStart(6, '0')
-                }}</td>
+              }}</td>
               <td class="px-6 py-4">
                 <div class="flex flex-col text-sm">
                   <span class="font-bold text-emerald-600">{{ order.user?.username ?? '-' }}</span>
@@ -61,10 +61,9 @@
                   <div v-for="(detail, index) in order.orderDetails" :key="index"
                     class="flex items-center justify-between py-2 border-b border-slate-200/60 last:border-0">
                     <div class="flex items-center gap-4">
-                      <img :src="detail.product?.imageUrl"
-                        class="w-10 h-10 object-contain bg-white rounded border p-1" />
+                      <img :src="detail.productImageUrl" class="w-10 h-10 object-contain bg-white rounded border p-1" />
                       <div>
-                        <span class="text-sm font-medium">{{ detail.product?.name }}</span>
+                        <span class="text-sm font-medium">{{ detail.productName }}</span>
                         <div class="text-xs text-slate-400">x {{ detail.quantity }}</div>
                       </div>
                     </div>
@@ -87,12 +86,12 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
-import { ordersService } from '../services/orders.service';
-import OrderTabs from '../components/order/OrderTabs.vue';
-import BulkActionBar from '../components/order/BulkActionBar.vue';
-import StatusBadge from '../components/common/StatusBadge.vue';
 import BaseButton from '../components/common/BaseButton.vue';
+import StatusBadge from '../components/common/StatusBadge.vue';
+import BulkActionBar from '../components/order/BulkActionBar.vue';
+import OrderTabs from '../components/order/OrderTabs.vue';
 import type { Order } from '../models/order.model';
+import { ordersService } from '../services/orders.service';
 
 const orders = ref<Order[]>([]);
 const loading = ref(false);

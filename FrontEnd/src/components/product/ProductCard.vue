@@ -20,7 +20,7 @@
     </p>
 
     <!-- ปุ่มเพิ่มลงรถเข็น (กรณีมี stock) -->
-    <button v-if="product.stock > 0"
+    <button v-if="product.stock > 0" :data-testid="`addOrder-${product.id}`"
       class="mt-auto bg-emerald-500 text-white text-sm py-2 rounded-lg hover:bg-emerald-600" @click="$emit('add')">
       <span class="material-symbols-outlined inline-block align-middle">
         add_shopping_cart
@@ -29,7 +29,7 @@
     </button>
 
     <!-- ปุ่มแสดงสถานะสินค้าหมด (กรณี stock = 0) -->
-    <button v-else disabled
+    <button v-else disabled :data-testid="`outOfStock-${product.id}`"
       class="mt-auto bg-slate-200 text-slate-500 text-sm py-2 rounded-lg inline-flex items-center justify-center gap-2">
       <span class="material-symbols-outlined"> block </span>
       สินค้าหมด

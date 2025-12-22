@@ -6,6 +6,7 @@ export interface Product {
   stock: number;
   category: string;
   imageUrl: string;
+  productImageUrl?: string;
 }
 
 export type ProductPayload = Omit<Product, 'id'>;

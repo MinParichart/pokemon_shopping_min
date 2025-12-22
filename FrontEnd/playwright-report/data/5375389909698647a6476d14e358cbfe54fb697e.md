@@ -1,0 +1,84 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - generic [ref=e7]: POKEMON
+        - link "สินค้าทั้งหมด" [ref=e8] [cursor=pointer]:
+          - /url: /products
+      - generic [ref=e9]:
+        - link "shopping_cart" [ref=e10] [cursor=pointer]:
+          - /url: /cart
+          - generic [ref=e11]: shopping_cart
+        - button "person" [ref=e13]:
+          - generic [ref=e14]: person
+  - main [ref=e15]:
+    - generic [ref=e18]:
+      - heading "รายการสั่งซื้อของฉัน" [level=1] [ref=e19]
+      - generic [ref=e20]:
+        - button "ทั้งหมด" [ref=e21]
+        - button "รอการยืนยันคำสั่งซื้อ" [ref=e22]
+        - button "ยืนยันคำสั่งซื้อ" [ref=e23]
+        - button "ปฏิเสธคำสั่งซื้อ" [ref=e24]
+        - button "ยกเลิกคำสั่งซื้อ" [active] [ref=e25]
+      - table [ref=e27]:
+        - rowgroup [ref=e28]:
+          - row "รหัสสั่งซื้อ จำนวนสินค้า ราคารวม สถานะ" [ref=e29]:
+            - columnheader "รหัสสั่งซื้อ" [ref=e30]
+            - columnheader "จำนวนสินค้า" [ref=e31]
+            - columnheader "ราคารวม" [ref=e32]
+            - columnheader "สถานะ" [ref=e33]
+            - columnheader [ref=e34]
+        - rowgroup [ref=e35]:
+          - row "000005 1 รายการ ฿83 ยกเลิกคำสั่งซื้อ keyboard_arrow_down" [ref=e36] [cursor=pointer]:
+            - cell "000005" [ref=e37]
+            - cell "1 รายการ" [ref=e38]
+            - cell "฿83" [ref=e39]
+            - cell "ยกเลิกคำสั่งซื้อ" [ref=e40]
+            - cell "keyboard_arrow_down" [ref=e41]:
+              - generic [ref=e42]: keyboard_arrow_down
+          - row "000025 1 รายการ ฿460 ยกเลิกคำสั่งซื้อ keyboard_arrow_down" [ref=e43] [cursor=pointer]:
+            - cell "000025" [ref=e44]
+            - cell "1 รายการ" [ref=e45]
+            - cell "฿460" [ref=e46]
+            - cell "ยกเลิกคำสั่งซื้อ" [ref=e47]
+            - cell "keyboard_arrow_down" [ref=e48]:
+              - generic [ref=e49]: keyboard_arrow_down
+          - row "000026 1 รายการ ฿460 ยกเลิกคำสั่งซื้อ keyboard_arrow_down" [ref=e50] [cursor=pointer]:
+            - cell "000026" [ref=e51]
+            - cell "1 รายการ" [ref=e52]
+            - cell "฿460" [ref=e53]
+            - cell "ยกเลิกคำสั่งซื้อ" [ref=e54]
+            - cell "keyboard_arrow_down" [ref=e55]:
+              - generic [ref=e56]: keyboard_arrow_down
+          - row "000027 2 รายการ ฿220 ยกเลิกคำสั่งซื้อ keyboard_arrow_down" [ref=e57] [cursor=pointer]:
+            - cell "000027" [ref=e58]
+            - cell "2 รายการ" [ref=e59]
+            - cell "฿220" [ref=e60]
+            - cell "ยกเลิกคำสั่งซื้อ" [ref=e61]
+            - cell "keyboard_arrow_down" [ref=e62]:
+              - generic [ref=e63]: keyboard_arrow_down
+          - row "000028 2 รายการ ฿184 ยกเลิกคำสั่งซื้อ keyboard_arrow_down" [ref=e64] [cursor=pointer]:
+            - cell "000028" [ref=e65]
+            - cell "2 รายการ" [ref=e66]
+            - cell "฿184" [ref=e67]
+            - cell "ยกเลิกคำสั่งซื้อ" [ref=e68]
+            - cell "keyboard_arrow_down" [ref=e69]:
+              - generic [ref=e70]: keyboard_arrow_down
+          - row "000029 1 รายการ ฿102 ยกเลิกคำสั่งซื้อ keyboard_arrow_down" [ref=e71] [cursor=pointer]:
+            - cell "000029" [ref=e72]
+            - cell "1 รายการ" [ref=e73]
+            - cell "฿102" [ref=e74]
+            - cell "ยกเลิกคำสั่งซื้อ" [ref=e75]
+            - cell "keyboard_arrow_down" [ref=e76]:
+              - generic [ref=e77]: keyboard_arrow_down
+          - row "000030 2 รายการ ฿320 ยกเลิกคำสั่งซื้อ keyboard_arrow_down" [ref=e78] [cursor=pointer]:
+            - cell "000030" [ref=e79]
+            - cell "2 รายการ" [ref=e80]
+            - cell "฿320" [ref=e81]
+            - cell "ยกเลิกคำสั่งซื้อ" [ref=e82]
+            - cell "keyboard_arrow_down" [ref=e83]:
+              - generic [ref=e84]: keyboard_arrow_down
+```
