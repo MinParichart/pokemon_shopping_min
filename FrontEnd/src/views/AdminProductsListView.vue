@@ -30,8 +30,8 @@ import { productsService } from '../services/products.service';
 import ProductFormView from './ProductFormView.vue';
 
 const products = ref<Product[]>([]);
-const keyword = ref('');
-const showModal = ref(false);
+const keyword = ref<string>('');
+const showModal = ref<boolean>(false);
 const selectedProduct = ref<Product | null>(null);
 
 async function load() {

@@ -91,10 +91,10 @@ const errors = reactive({
   confirmPassword: ''
 });
 
-const loading = ref(false);
-const globalError = ref('');
-const success = ref(false);
-const showPassword = ref(false);
+const loading = ref<boolean>(false);
+const globalError = ref<string>('');
+const success = ref<boolean>(false);
+const showPassword = ref<boolean>(false);
 
 function validateForm(): boolean {
   let isValid = true;
